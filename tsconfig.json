@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-native",
+    "lib": ["dom", "esnext"],
+    "moduleResolution": "node",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "alwaysStrict": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "rootDir": "src",
+    "baseUrl": "src",
+  },
+  "include": ["src/**/*"]
+}
