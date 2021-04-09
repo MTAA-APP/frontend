@@ -13,6 +13,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "rootDir": "src",
     "baseUrl": "src",
+    "typeRoots": ["./src/types"],
   },
   "include": ["src/**/*"]
 }
