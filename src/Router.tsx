@@ -3,7 +3,7 @@ import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { Home } from 'screens'
+import { Home, SignUp, CustomerSignUp, ServiceSignUp } from 'screens'
 import { Header } from 'components'
 import { RootStackParamList } from 'types/stack'
 
@@ -27,6 +27,24 @@ const Router = () => (
       <Stack.Screen
         name="Home"
         component={Home}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="SignUp"
+        component={SignUp}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="CustomerSignUp"
+        component={CustomerSignUp}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="ServiceSignUp"
+        component={ServiceSignUp}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
