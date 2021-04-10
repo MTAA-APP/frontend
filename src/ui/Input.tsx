@@ -20,9 +20,19 @@ const Input = ({
   const onChangeText = useCallback(onChange(name), [])
 
   return (
-    <Box>
-      <Text variant="label">{label}</Text>
-      <TextInput {...{ value, onChangeText, ...rest }} />
+    <Box marginBottom="xl">
+      <Text variant="label" marginBottom="m">
+        {label}
+      </Text>
+
+      <TextInput
+        {...{ value, onChangeText, ...rest }}
+        style={{
+          borderBottomColor: '#ccc',
+          borderStyle: 'solid',
+          borderBottomWidth: 2,
+        }}
+      />
 
       {!!errors[name] && <Text variant="error">{errors[name]}</Text>}
     </Box>

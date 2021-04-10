@@ -23,6 +23,7 @@ const variant = createVariant({
     paddingVertical: 'm',
     paddingHorizontal: 'xl',
     borderRadius: 50,
+    alignItems: 'center',
   },
 })
 

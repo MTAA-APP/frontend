@@ -8,17 +8,32 @@ type Props = StackScreenProps<RootStackParamList, 'Home'>
 
 const Home = ({ navigation }: Props) => {
   return (
-    <>
-      <Box height="75%" width="100%" backgroundColor="black" borderRadius={16} />
+    <Box flex={1}>
+      <Box
+        height="75%"
+        flex={1}
+        backgroundColor="black"
+        borderBottomLeftRadius={18}
+        borderBottomRightRadius={18}
+      />
 
-      <Box padding="xl" flex={1} flexDirection="column">
-        <Text variant="title" marginBottom="m">Lorem Ipsum & Dolor sit amet</Text>
+      <Box
+        flex={1}
+        padding="xl"
+        justifyContent="space-between"
+        flexDirection="column"
+      >
+        <Box marginBottom="xl">
+          <Text variant="title" marginBottom="xl">
+            Lorem Ipsum & Dolor sit amet
+          </Text>
 
-        <Text>Lorem ipsum dolor sit amet.</Text>
+          <Text>Lorem ipsum dolor sit amet</Text>
+        </Box>
 
-        <Button title="Sign In" onPress={() => navigation.push('SignIn')} />
+        <Button title="Sign In" onPress={() => navigation.push('SignIn')} />
       </Box>
-    </>
+    </Box>
   )
 }
 

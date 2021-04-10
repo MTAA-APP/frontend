@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 
 import { Box, Button } from 'ui'
@@ -9,8 +9,14 @@ type Props = StackScreenProps<RootStackParamList, 'SignUp'>
 const SignUp = ({ navigation }: Props) => {
   return (
     <Box flex={1} justifyContent="center" alignItems="center">
-      <Button title="Customer" onPress={() => navigation.push('CustomerSignUp')} />
-      <Button title="Service" onPress={() => navigation.push('ServiceSignUp')} />
+      <Button
+        title="Customer"
+        onPress={() => navigation.push('CustomerSignUp')}
+      />
+      <Button
+        title="Service"
+        onPress={() => navigation.push('ServiceSignUp')}
+      />
     </Box>
   )
 }
