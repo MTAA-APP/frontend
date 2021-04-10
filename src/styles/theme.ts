@@ -63,6 +63,24 @@ const theme = createTheme({
       lineHeight: 15,
       color: 'label',
     },
+    button: {
+      fontFamily: 'Rubik_500Medium',
+      fontWeight: '500',
+      fontSize: 18,
+      color: 'background',
+    },
+    error: {
+      fontFamily: 'Rubik_400Regular',
+      fontWeight: '400',
+      fontSize: 12,
+      color: 'primary',
+    },
+  },
+
+  buttonVariants: {
+    primary: {
+      backgroundColor: 'primary',
+    },
   },
 })
 

@@ -1,25 +1,30 @@
-import React from 'react'
-import { useTheme } from '@shopify/restyle'
-import { TextInput } from 'react-native'
+import React, { useCallback } from 'react'
+import { TextInput, TextInputProps } from 'react-native'
+import { FieldProps } from 'formik'
 
 import Box from './Box'
 import Text from './Text'
 
-import { Theme } from 'styles/theme'
+type Props = FieldProps &
+  TextInputProps & {
+    label: string
+  }
 
-type Props = {
-  label: string
-  value: string
-  onChangeText: () => void
-}
-
-const Input = ({ label, value, onChangeText, ...rest }: Props) => {
-  const theme = useTheme<Theme>()
+const Input = ({
+  label,
+  field: { name, value, onChange },
+  form: { errors },
+  meta,
+  ...rest
+}: Props) => {
+  const onChangeText = useCallback(onChange(name), [])
 
   return (
-    <Box {...rest}>
-      <Text>{label}</Text>
-      <TextInput {...{ value, onChangeText }} />
+    <Box>
+      <Text variant="label">{label}</Text>
+      <TextInput {...{ value, onChangeText, ...rest }} />
+
+      {!!errors[name] && <Text variant="error">{errors[name]}</Text>}
     </Box>
   )
 }
