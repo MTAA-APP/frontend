@@ -30,7 +30,7 @@ export enum ServiceCategory {
   CANTEEN = 'CANTEEN',
   PIZZA = 'PIZZA',
   DELIVERY = 'DELIVERY',
-  PATISSERIE = 'PATTISERIE',
+  PATISSERIE = 'PATISSERIE',
   PUB = 'PUB',
   FASTFOOD = 'FASTFOOD',
 }

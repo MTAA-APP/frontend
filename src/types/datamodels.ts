@@ -15,6 +15,11 @@ export type User = {
   role: Role
 }
 
+export type AuthPayload = {
+  user: User
+  token: string
+}
+
 export type Item = {
   id: string
   name: string

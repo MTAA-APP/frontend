@@ -12,3 +12,10 @@ export { default as GET_MENU } from './getMenu'
 // Orders
 export { default as GET_ORDERS } from './getOrders'
 export { default as GET_ORDER } from './getOrder'
+
+// Cart
+export { default as GET_CART } from './getCart'
+
+// Profile
+export { default as GET_CUSTOMER_PROFILE } from './getCustomerProfile'
+export { default as GET_SERVICE_PROFILE } from './getServiceProfile'

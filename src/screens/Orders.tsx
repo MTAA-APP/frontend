@@ -4,14 +4,14 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { Box, Text } from 'ui'
 import { RootStackParamList } from 'types/stack'
 
-type Props = StackScreenProps<RootStackParamList, 'CustomerSignUp'>
+type Props = StackScreenProps<RootStackParamList, 'Orders'>
 
-const CustomerSignUp = ({ navigation }: Props) => {
+const Orders = ({ navigation }: Props) => {
   return (
     <Box flex={1} justifyContent="center" alignItems="center">
-      <Text>CustomerSignUp</Text>
+      <Text>Orders</Text>
     </Box>
   )
 }
 
-export default CustomerSignUp
+export default Orders

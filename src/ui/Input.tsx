@@ -1,9 +1,12 @@
 import React, { useCallback } from 'react'
 import { TextInput, TextInputProps } from 'react-native'
 import { FieldProps } from 'formik'
+import { useTheme } from '@shopify/restyle'
 
 import Box from './Box'
 import Text from './Text'
+
+import { Theme } from 'styles/theme'
 
 type Props = FieldProps &
   TextInputProps & {
@@ -17,24 +20,31 @@ const Input = ({
   meta,
   ...rest
 }: Props) => {
+  const theme = useTheme<Theme>()
+
   const onChangeText = useCallback(onChange(name), [])
 
   return (
-    <Box marginBottom="xl">
-      <Text variant="label" marginBottom="m">
-        {label}
-      </Text>
+    <Box marginBottom="m">
+      <Text variant="label">{label}</Text>
 
       <TextInput
         {...{ value, onChangeText, ...rest }}
         style={{
-          borderBottomColor: '#ccc',
+          ...theme.textVariants.input,
+          color: theme.colors.title,
+          borderBottomColor: '#DBDCDD',
           borderStyle: 'solid',
-          borderBottomWidth: 2,
+          borderBottomWidth: 1,
+          paddingVertical: 4,
         }}
       />
 
-      {!!errors[name] && <Text variant="error">{errors[name]}</Text>}
+      {!!errors[name] && (
+        <Text variant="error" marginTop="xs">
+          {errors[name]}
+        </Text>
+      )}
     </Box>
   )
 }

@@ -6,7 +6,7 @@ import { RootStackParamList } from 'types/stack'
 
 type Props = StackScreenProps<RootStackParamList, 'ServiceSignUp'>
 
-const ServiceSignUp = ({ navigation }: Props) => {
+const Service = ({ navigation }: Props) => {
   return (
     <Box flex={1} justifyContent="center" alignItems="center">
       <Text>ServiceSignUp</Text>
@@ -14,4 +14,4 @@ const ServiceSignUp = ({ navigation }: Props) => {
   )
 }
 
-export default ServiceSignUp
+export default Service

@@ -21,9 +21,11 @@ const variant = createVariant({
   themeKey: 'buttonVariants',
   defaults: {
     paddingVertical: 'm',
-    paddingHorizontal: 'xl',
+    paddingHorizontal: 's',
     borderRadius: 50,
     alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 'm',
   },
 })
 

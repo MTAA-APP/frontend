@@ -7,13 +7,17 @@ import client from './src/apollo'
 import Router from './src/Router'
 import LoadAssets from './src/components/LoadAssets'
 
+import { AuthProvider } from './src/contexts/AuthContext'
+
 import theme from './src/styles/theme'
 
 const App = () => (
   <ApolloProvider {...{ client }}>
     <ThemeProvider {...{ theme }}>
       <LoadAssets>
-        <Router />
+        <AuthProvider>
+          <Router />
+        </AuthProvider>
       </LoadAssets>
     </ThemeProvider>
   </ApolloProvider>

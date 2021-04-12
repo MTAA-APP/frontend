@@ -3,10 +3,12 @@ import { createTheme } from '@shopify/restyle'
 const palette = {
   black: '#000000',
   white: '#FFFFFF',
+  transparent: 'rgba(255, 255, 255, 0)',
 
   lightGrey: '#FBFBFB',
   grey: '#C3C8D3',
   darkGrey: '#272D2F',
+  selected: '#9099B6',
 
   red: '#F36769',
   green: '#92C255',
@@ -20,13 +22,18 @@ const theme = createTheme({
     background: palette.lightGrey,
     primary: palette.red,
     label: palette.grey,
+    transparent: palette.transparent,
+    selected: palette.selected,
   },
 
   spacing: {
+    xs: 4,
     s: 8,
     m: 16,
     l: 24,
     xl: 30,
+    xxl: 72,
+    xxxl: 110,
   },
 
   breakpoints: {
@@ -53,7 +60,7 @@ const theme = createTheme({
       fontFamily: 'Rubik_400Regular',
       fontWeight: '400',
       fontSize: 15,
-      lineHeight: 19,
+      lineHeight: 21,
       color: 'label',
     },
     label: {
@@ -74,6 +81,17 @@ const theme = createTheme({
       fontWeight: '400',
       fontSize: 12,
       color: 'primary',
+    },
+    item: {
+      fontFamily: 'Rubik_500Medium',
+      fontWeight: '500',
+      fontSize: 22,
+      lineHeight: 26,
+      color: 'title',
+    },
+    input: {
+      fontFamily: 'Rubik_400Regular',
+      fontSize: 15,
     },
   },
 
