@@ -31,6 +31,8 @@ const initialValues: FormValues = {
   password: '',
 }
 
+// TODO: errors
+
 const SignIn = ({ navigation }: Props) => {
   const [signin] = useMutation<{ signin: AuthPayload }>(SIGN_IN)
 
@@ -38,8 +40,8 @@ const SignIn = ({ navigation }: Props) => {
 
   const onSubmit = useCallback((values: FormValues) => {
     signin({ variables: { body: values } })
-      .then(({ data }) => {
-        if (!data?.signin) throw Error('UnauthorizedError')
+      .then(({ data, errors }) => {
+        if (!data?.signin || !!errors) throw Error()
         login(data?.signin?.token)
       })
       .catch((err) => console.log('Error', err))

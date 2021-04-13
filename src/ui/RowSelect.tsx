@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { TouchableRipple } from 'react-native-paper'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import { FlatList } from 'react-native'
 
 import Box from './Box'
@@ -10,7 +10,7 @@ import { SERVICE_CATEGORY } from 'constants/enums'
 type Props = {
   items: ServiceCategory[]
   selected: ServiceCategory | undefined
-  handleSelect: (category: ServiceCategory | undefined) => void
+  handleSelect: (category?: ServiceCategory) => void
 }
 
 const RowSelect = ({ items, selected, handleSelect }: Props) => {
@@ -24,9 +24,9 @@ const RowSelect = ({ items, selected, handleSelect }: Props) => {
         scrollToOverflowEnabled
         showsHorizontalScrollIndicator={false}
         style={{ overflow: 'visible' }}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(index) => `${index}`}
         renderItem={({ item }) => (
-          <TouchableRipple onPress={() => handleSelect(item)}>
+          <TouchableOpacity onPress={() => handleSelect(item)}>
             <Box
               accessible
               paddingVertical="xs"
@@ -39,7 +39,7 @@ const RowSelect = ({ items, selected, handleSelect }: Props) => {
                 {item ? SERVICE_CATEGORY[item] : 'All'}
               </Text>
             </Box>
-          </TouchableRipple>
+          </TouchableOpacity>
         )}
       />
     </Box>

@@ -5,31 +5,31 @@ import { Image } from 'react-native'
 import { Box, Text, ActionButton } from 'ui'
 
 import PLACEHOLDER from 'assets/images/image-placeholder.png'
-import STAR_ICON from 'assets/icons/star.png'
-import DELETE_ICON from 'assets/icons/delete.png'
+import CROSS_ICON from 'assets/icons/cross.png'
+import READY_ICON from 'assets/icons/ready.png'
 
 type Props = {
-  variant?: 'primary' | 'secondary'
-  title: string
+  title?: string
   description?: string
-  picture?: string
 }
 
-const Item = ({ variant = 'primary', title, description, picture }: Props) => {
+const OrderBox = ({ title, description }: Props) => {
   return (
     <Swipeable
       containerStyle={{ overflow: 'visible' }}
       renderLeftActions={() => (
         <ActionButton
+          variant="secondary"
           side="left"
-          icon={STAR_ICON}
+          icon={READY_ICON}
           onPress={() => console.log('close')}
         />
       )}
       renderRightActions={() => (
         <ActionButton
+          variant="secondary"
           side="right"
-          icon={DELETE_ICON}
+          icon={CROSS_ICON}
           onPress={() => console.log('close')}
         />
       )}
@@ -38,32 +38,31 @@ const Item = ({ variant = 'primary', title, description, picture }: Props) => {
         flex={1}
         flexDirection="row"
         borderRadius={16}
-        height={130}
+        minHeight={85}
+        padding="m"
         backgroundColor="white"
         marginHorizontal="xl"
         marginVertical="s"
         elevation={5}
       >
-        <Box flex={1} padding="m" flexDirection="column">
-          <Text variant="item" marginBottom="xs">
-            {title}
-          </Text>
-
-          {!!description && <Text>{description}</Text>}
-        </Box>
-
         <Image
           source={PLACEHOLDER}
           style={{
-            width: 130,
-            height: '100%',
-            borderRadius: 16,
+            width: 53,
+            height: 53,
+            borderRadius: 100,
+            marginRight: 16,
           }}
           resizeMode="cover"
         />
+
+        <Box flexDirection="column">
+          <Text variant="order">{title}</Text>
+          <Text variant="label">{description}</Text>
+        </Box>
       </Box>
     </Swipeable>
   )
 }
 
-export default Item
+export default OrderBox

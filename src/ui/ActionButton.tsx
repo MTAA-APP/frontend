@@ -1,30 +1,46 @@
 import React from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { Image } from 'react-native'
 
 import Box from './Box'
 
 type Props = {
   side?: 'left' | 'right'
+  variant?: 'primary' | 'secondary'
+  icon: number
   onPress: () => void
 }
 
-const ActionButton = ({ side = 'left', onPress }: Props) => (
+const ActionButton = ({
+  side = 'left',
+  variant = 'primary',
+  icon,
+  onPress,
+}: Props) => (
   <TouchableOpacity
     {...onPress}
     style={{
-      ...(side === 'left' ? { marginRight: -14 } : { marginLeft: -14 }),
-      overflow: 'visible',
+      ...(side === 'right' ? { marginLeft: -14 } : { marginRight: -14 }),
     }}
   >
     <Box
       accessible
-      height={130}
-      width={85}
+      height={variant === 'secondary' ? 85 : 130}
+      width={variant === 'secondary' ? 54 : 85}
       borderRadius={16}
-      backgroundColor="selected"
+      backgroundColor="label"
       marginVertical="s"
-      {...(side === 'left' ? { marginLeft: 'xl' } : { marginRight: 'xl' })}
-    />
+      justifyContent="center"
+      alignItems="center"
+      padding={variant === 'secondary' ? 'ml' : 'xl'}
+      {...(side === 'right' ? { marginRight: 'xl' } : { marginLeft: 'xl' })}
+    >
+      <Image
+        source={icon}
+        style={{ width: '100%', height: '100%' }}
+        resizeMode="contain"
+      />
+    </Box>
   </TouchableOpacity>
 )
 

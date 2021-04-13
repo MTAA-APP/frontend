@@ -1,5 +1,4 @@
 import React from 'react'
-import { TouchableRipple } from 'react-native-paper'
 import {
   createRestyleComponent,
   createVariant,
@@ -9,6 +8,7 @@ import {
 import Text from './Text'
 
 import { Theme } from 'styles/theme'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 type Variant = VariantProps<Theme, 'buttonVariants'>
 
@@ -31,7 +31,7 @@ const variant = createVariant({
 
 const Wrapper = createRestyleComponent<Variant, Theme>(
   [variant],
-  TouchableRipple
+  TouchableOpacity
 )
 
 const Button = ({ title, onPress, variant = 'primary', ...rest }: Props) => (

@@ -1,43 +1,40 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
-import { TouchableRipple } from 'react-native-paper'
-import { FlatList } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { FlatList, Image, RefreshControl } from 'react-native'
 import { useQuery } from '@apollo/client'
 import AppLoading from 'expo-app-loading'
 
 import { RootStackParamList } from 'types/stack'
-import { Box, RowSelect, Text } from 'ui'
+import { Box, NoData, RowSelect, Search, Text } from 'ui'
 import { Item } from 'components'
 import { Service } from 'types/datamodels'
 import { ServiceCategory } from 'types/enums'
 
 import { GET_SERVICES } from 'apollo/queries'
 
+import STAR_ICON from 'assets/icons/star.png'
+
 type Props = StackScreenProps<RootStackParamList, 'Home'>
 
-type QueryVariables = {
-  favorites?: boolean
-  search?: string
-  category?: ServiceCategory
-}
-
-// TODO: filters
+type QueryType = { getServices: Service[] }
 
 const Services = ({ navigation }: Props) => {
-  const [variables, setVariables] = useState<QueryVariables>({
-    favorites: false,
+  const [favorites, setFavorites] = useState<boolean>(false)
+  const [search, setSearch] = useState<string>(undefined!)
+  const [category, setCategory] = useState<ServiceCategory>(undefined!)
+
+  const { data, loading, refetch } = useQuery<QueryType>(GET_SERVICES, {
+    variables: {
+      ...(!!favorites && { favorites }),
+      ...(!!search && { search }),
+      ...(!!category && { category }),
+    },
   })
 
-  const handleChange = (newVariables: QueryVariables) => {
-    setVariables({ ...variables, ...newVariables })
-  }
-
-  const { data, loading, refetch } = useQuery<{ getServices: Service[] }>(
-    GET_SERVICES,
-    {}
-  )
-
-  if (loading) return <AppLoading />
+  useEffect(() => {
+    refetch()
+  }, [favorites, search, category])
 
   return (
     <>
@@ -50,23 +47,34 @@ const Services = ({ navigation }: Props) => {
         >
           <Text variant="title">Services</Text>
 
-          <TouchableRipple
-            onPress={() => handleChange({ favorites: !variables?.favorites })}
-          >
+          <TouchableOpacity onPress={() => setFavorites(!favorites)}>
             <Box
               accessible
               width={30}
               height={30}
-              backgroundColor={variables?.favorites ? 'selected' : 'label'}
+              backgroundColor={favorites ? 'primary' : 'label'}
               borderRadius={8}
-            />
-          </TouchableRipple>
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Image
+                source={STAR_ICON}
+                style={{
+                  height: 16,
+                  width: 16,
+                }}
+                resizeMode="contain"
+              />
+            </Box>
+          </TouchableOpacity>
         </Box>
 
+        <Search onChangeText={(value: string) => setSearch(value)} />
+
         <RowSelect
-          selected={variables.category}
-          handleSelect={(category: ServiceCategory | undefined) =>
-            handleChange({ category })
+          selected={category}
+          handleSelect={(category?: ServiceCategory) =>
+            setCategory(category || undefined!)
           }
           items={Object.values(ServiceCategory)}
         />
@@ -76,6 +84,13 @@ const Services = ({ navigation }: Props) => {
         data={data?.getServices}
         keyExtractor={(item) => item?.id}
         contentContainerStyle={{ paddingBottom: 30 }}
+        refreshing={loading}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={refetch} />
+        }
+        ListEmptyComponent={
+          <NoData loading={loading} text="No services found." />
+        }
         renderItem={({ item }) => (
           <Item
             title={item?.name}

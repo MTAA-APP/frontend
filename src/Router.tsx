@@ -66,7 +66,11 @@ const Router = () => {
       >
         {isLogged ? (
           user?.role === Role.SERVICE ? (
-            <Stack.Screen name="Orders" component={Orders} />
+            <Stack.Screen
+              name="Orders"
+              component={Orders}
+              options={{ headerLeft: () => false }}
+            />
           ) : (
             <Stack.Screen
               name="Services"

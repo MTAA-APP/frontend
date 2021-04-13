@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export default gql`
-  mutation serviceSignup($body: SeriviceSigninBody!) {
+  mutation serviceSignup($body: SeriviceSignupBody!) {
     serviceSignup: publish(body: $body)
       @rest(
         type: "AuthPayload"

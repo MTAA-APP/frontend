@@ -30,6 +30,7 @@ const theme = createTheme({
     xs: 4,
     s: 8,
     m: 16,
+    ml: 20,
     l: 24,
     xl: 30,
     xxl: 72,
@@ -87,6 +88,13 @@ const theme = createTheme({
       fontWeight: '500',
       fontSize: 22,
       lineHeight: 26,
+      color: 'title',
+    },
+    order: {
+      fontFamily: 'Rubik_500Medium',
+      fontWeight: '500',
+      fontSize: 18,
+      lineHeight: 24,
       color: 'title',
     },
     input: {

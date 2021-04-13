@@ -1,11 +1,16 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { Formik, Field } from 'formik'
 import * as Yup from 'yup'
 import { Image } from 'react-native'
+import { useMutation } from '@apollo/client'
 
-import { Box, Text, Input, Button, BottomInfo } from 'ui'
 import { RootStackParamList } from 'types/stack'
+import { Box, Text, Input, Button, BottomInfo } from 'ui'
+import { useContext } from 'hooks'
+import { AuthPayload } from 'types/datamodels'
+
+import { CUSTOMER_SIGNUP } from 'apollo/mutations'
 
 import PLACEHOLDER from 'assets/images/image-placeholder.png'
 
@@ -24,7 +29,9 @@ const validationSchema = Yup.object().shape({
   lastName: Yup.string().required(),
   email: Yup.string().email().required(),
   password: Yup.string().required().min(3),
-  confirm: Yup.string().required(), // TODO: compare passwords
+  confirm: Yup.string()
+    .required()
+    .oneOf([Yup.ref('password'), null], 'passwords must match'),
 })
 
 const initialValues: FormValues = {
@@ -35,9 +42,20 @@ const initialValues: FormValues = {
   confirm: '',
 }
 
+// TODO: errors
+
 const Customer = ({ navigation }: Props) => {
-  const onSubmit = useCallback((values: FormValues) => {
-    console.log(values)
+  const [signup] = useMutation<{ customerSignup: AuthPayload }>(CUSTOMER_SIGNUP)
+
+  const { login } = useContext('auth')
+
+  const onSubmit = useCallback(({ confirm, ...values }: FormValues) => {
+    signup({ variables: { body: values } })
+      .then(({ data, errors }) => {
+        if (!data?.customerSignup || !!errors) throw Error()
+        login(data?.customerSignup?.token)
+      })
+      .catch((err) => console.log('Error', err))
   }, [])
 
   return (
@@ -60,7 +78,7 @@ const Customer = ({ navigation }: Props) => {
           </Text>
 
           <Text variant="label" paddingBottom="xl">
-            Sign up as Customer..
+            Sign up as customer...
           </Text>
 
           <Formik
@@ -106,7 +124,7 @@ const Customer = ({ navigation }: Props) => {
                   textContentType="password"
                   type="password"
                   name="confirm"
-                  label="Confirm Password"
+                  label="Confirm password"
                   component={Input}
                 />
 

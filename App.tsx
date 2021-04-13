@@ -11,6 +11,8 @@ import { AuthProvider } from './src/contexts/AuthContext'
 
 import theme from './src/styles/theme'
 
+// TODO: splash screen
+
 const App = () => (
   <ApolloProvider {...{ client }}>
     <ThemeProvider {...{ theme }}>
