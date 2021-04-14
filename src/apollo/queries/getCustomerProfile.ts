@@ -6,7 +6,7 @@ export default gql`
       email
       firstName
       lastName
-      phonr
+      phone
       payment
       address @type(name: "Address") {
         id

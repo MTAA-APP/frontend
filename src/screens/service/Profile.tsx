@@ -4,7 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { RootStackParamList } from 'types/stack'
 import { Box, Text } from 'ui'
 
-type Props = StackScreenProps<RootStackParamList, 'CustomerProfile'>
+type Props = StackScreenProps<RootStackParamList, 'ServiceProfile'>
 
 const Profile = ({ navigation }: Props) => {
   return (

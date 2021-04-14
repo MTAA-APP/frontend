@@ -133,7 +133,7 @@ const Router = () => {
               <Stack.Screen
                 name="CustomerProfile"
                 component={CustomerProfile}
-                options={{ headerLeft: () => false }}
+                options={{ headerLeft: () => false, title: 'Profile' }} // TODO: enable header
               />
             </>
           )
