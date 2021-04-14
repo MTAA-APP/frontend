@@ -4,28 +4,29 @@ import {
   createVariant,
   VariantProps,
 } from '@shopify/restyle'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import Text from './Text'
 
 import { Theme } from 'styles/theme'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 
 type Variant = VariantProps<Theme, 'buttonVariants'>
 
 type Props = Variant & {
   title: string
   onPress: () => void
+  style?: {}
 }
 
 const variant = createVariant({
   themeKey: 'buttonVariants',
   defaults: {
+    width: '100%',
     paddingVertical: 'm',
-    paddingHorizontal: 's',
+    paddingHorizontal: 'xxl',
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 'm',
   },
 })
 

@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useCallback, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { FlatList, Image, RefreshControl } from 'react-native'
-import {
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-} from 'react-native-gesture-handler'
-import { useQuery } from '@apollo/client'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { useMutation, useQuery } from '@apollo/client'
 
 import { RootStackParamList } from 'types/stack'
 import { Box, NoData, RowSelect, Search, Text } from 'ui'
@@ -14,12 +11,15 @@ import { Service } from 'types/datamodels'
 import { ServiceCategory } from 'types/enums'
 
 import { GET_SERVICES } from 'apollo/queries'
+import { DELETE_SERVICE, UPDATE_FAVORITE } from 'apollo/mutations'
 
 import STAR_ICON from 'assets/icons/star.png'
 
 type Props = StackScreenProps<RootStackParamList, 'Home'>
 
 type QueryType = { getServices: Service[] }
+
+// TODO: shadows
 
 const Services = ({ navigation }: Props) => {
   const [favorites, setFavorites] = useState<boolean>(false)
@@ -33,6 +33,22 @@ const Services = ({ navigation }: Props) => {
       ...(!!category && { category }),
     },
   })
+
+  const [removeService] = useMutation(DELETE_SERVICE)
+  const [addService] = useMutation(UPDATE_FAVORITE)
+
+  const handleRemove = useCallback((id: string) => {
+    removeService({ variables: { id } })
+      .then(() => refetch())
+      .catch((err) => console.log('Error', err))
+  }, [])
+
+  const handleAdd = useCallback((id: string) => {
+    // TODO: fix
+    addService({ variables: { body: id } })
+      .then(() => refetch())
+      .catch((err) => console.log('Error', err))
+  }, [])
 
   useEffect(() => {
     const timeout = setTimeout(refetch, 800)
@@ -102,18 +118,20 @@ const Services = ({ navigation }: Props) => {
           <NoData loading={loading} text="No services found." />
         }
         renderItem={({ item }) => (
-          <TouchableWithoutFeedback
-            onPress={() => navigation.navigate('Service', { id: item?.id })}
-          >
-            <Item
-              title={item?.name}
-              description={item?.description}
-              picture={item?.picture}
-              leftIcon={STAR_ICON}
-              handleLeftPress={() => console.log('left')}
-              handleRightPress={() => console.log('right')}
-            />
-          </TouchableWithoutFeedback>
+          <Item
+            title={item?.name}
+            description={item?.description}
+            picture={item?.picture}
+            leftIcon={STAR_ICON}
+            handlePress={() => navigation.navigate('Service', { id: item?.id })}
+            {...(item?.customers?.length
+              ? {
+                  handleRightPress: () => handleRemove(item?.id),
+                }
+              : {
+                  handleLeftPress: () => handleAdd(item?.id),
+                })}
+          />
         )}
       />
     </>

@@ -128,7 +128,11 @@ const Customer = ({ navigation }: Props) => {
                   component={Input}
                 />
 
-                <Button title="Sign Up" onPress={handleSubmit} />
+                <Button
+                  style={{ marginTop: 16 }}
+                  title="Sign Up"
+                  onPress={handleSubmit}
+                />
               </>
             )}
           </Formik>

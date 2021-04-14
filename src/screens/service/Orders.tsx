@@ -39,6 +39,7 @@ const Orders = ({ navigation }: Props) => {
             title={item?.customer?.email}
             description="Lorem ipsum dolor sit amet"
             leftIcon={READY_ICON}
+            handlePress={() => navigation.navigate('Order', { id: item?.id })}
             handleLeftPress={() => console.log('left')}
             handleRightPress={() => console.log('right')}
           />
