@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import { FlatList, Image, RefreshControl } from 'react-native'
+import {
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native-gesture-handler'
 import { useQuery } from '@apollo/client'
-import AppLoading from 'expo-app-loading'
 
 import { RootStackParamList } from 'types/stack'
 import { Box, NoData, RowSelect, Search, Text } from 'ui'
@@ -33,8 +35,13 @@ const Services = ({ navigation }: Props) => {
   })
 
   useEffect(() => {
+    const timeout = setTimeout(refetch, 800)
+    return () => clearTimeout(timeout)
+  }, [search])
+
+  useEffect(() => {
     refetch()
-  }, [favorites, search, category])
+  }, [favorites, category])
 
   return (
     <>
@@ -52,7 +59,7 @@ const Services = ({ navigation }: Props) => {
               accessible
               width={30}
               height={30}
-              backgroundColor={favorites ? 'primary' : 'label'}
+              backgroundColor={favorites ? 'primary' : 'selected'}
               borderRadius={8}
               alignItems="center"
               justifyContent="center"
@@ -69,7 +76,10 @@ const Services = ({ navigation }: Props) => {
           </TouchableOpacity>
         </Box>
 
-        <Search onChangeText={(value: string) => setSearch(value)} />
+        <Search
+          value={search}
+          onChangeText={(value: string) => setSearch(value)}
+        />
 
         <RowSelect
           selected={category}
@@ -92,11 +102,18 @@ const Services = ({ navigation }: Props) => {
           <NoData loading={loading} text="No services found." />
         }
         renderItem={({ item }) => (
-          <Item
-            title={item?.name}
-            description={item?.description}
-            picture={item?.picture}
-          />
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate('Service', { id: item?.id })}
+          >
+            <Item
+              title={item?.name}
+              description={item?.description}
+              picture={item?.picture}
+              leftIcon={STAR_ICON}
+              handleLeftPress={() => console.log('left')}
+              handleRightPress={() => console.log('right')}
+            />
+          </TouchableWithoutFeedback>
         )}
       />
     </>

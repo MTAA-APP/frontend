@@ -12,6 +12,9 @@ export default gql`
       name
       picture
       category
+      customers @type(name: "[Customer]") {
+        id
+      }
     }
   }
 `

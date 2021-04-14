@@ -10,8 +10,16 @@ export { default as DELETE_ITEM } from './deleteItem'
 // Cart
 export { default as CREATE_ORDER_ITEM } from './createOrderItem'
 export { default as DELETE_ORDER_ITEM } from './deleteOrderItem'
+export { default as UPDATE_ORDER_PAY } from './updateOrderPay'
 
 // Services
 export { default as DELETE_SERVICE } from './deleteService'
+export { default as UPDATE_FAVORITE } from './updateFavorite'
 
-// TODO: update / upsert mutations
+// Orders
+export { default as UPDATE_ORDER_STATUS } from './updateOrderStatus'
+
+// Profile
+export { default as UPDATE_CUSTOMER } from './updateCustomer'
+export { default as UPDATE_SERVICE } from './updateService'
+export { default as UPSERT_ADDRESS } from './upsertAddress'

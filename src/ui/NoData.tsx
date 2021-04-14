@@ -1,16 +1,18 @@
 import React from 'react'
 import { Image } from 'react-native'
+import AppLoading from 'expo-app-loading'
 
 import Box from './Box'
 import Text from './Text'
 
 import EMPTY_ICON from 'assets/icons/empty.png'
-import AppLoading from 'expo-app-loading'
 
 type Props = {
   text?: string
   loading?: boolean
 }
+
+// TODO: loading
 
 const NoData = ({ text, loading = true }: Props) =>
   loading ? (

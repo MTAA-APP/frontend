@@ -18,7 +18,7 @@ const ActionButton = ({
   onPress,
 }: Props) => (
   <TouchableOpacity
-    {...onPress}
+    onPress={onPress}
     style={{
       ...(side === 'right' ? { marginLeft: -14 } : { marginRight: -14 }),
     }}
@@ -32,12 +32,11 @@ const ActionButton = ({
       marginVertical="s"
       justifyContent="center"
       alignItems="center"
-      padding={variant === 'secondary' ? 'ml' : 'xl'}
       {...(side === 'right' ? { marginRight: 'xl' } : { marginLeft: 'xl' })}
     >
       <Image
         source={icon}
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: '100%', height: '15%', maxWidth: '55%' }}
         resizeMode="contain"
       />
     </Box>

@@ -1,11 +1,10 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import { Image } from 'react-native'
 
 import { Box, Text, ActionButton } from 'ui'
 
 import PLACEHOLDER from 'assets/images/image-placeholder.png'
-import STAR_ICON from 'assets/icons/star.png'
 import DELETE_ICON from 'assets/icons/delete.png'
 
 type Props = {
@@ -13,26 +12,50 @@ type Props = {
   title: string
   description?: string
   picture?: string
+  leftIcon: number
+  handleLeftPress?: () => void
+  handleRightPress?: () => void
 }
 
-const Item = ({ variant = 'primary', title, description, picture }: Props) => {
+const Item = ({
+  variant = 'primary',
+  title,
+  description,
+  picture,
+  leftIcon,
+  handleLeftPress,
+  handleRightPress,
+}: Props) => {
+  const ref = useRef<Swipeable>(null)
+
   return (
     <Swipeable
+      ref={ref}
       containerStyle={{ overflow: 'visible' }}
-      renderLeftActions={() => (
-        <ActionButton
-          side="left"
-          icon={STAR_ICON}
-          onPress={() => console.log('close')}
-        />
-      )}
-      renderRightActions={() => (
-        <ActionButton
-          side="right"
-          icon={DELETE_ICON}
-          onPress={() => console.log('close')}
-        />
-      )}
+      renderLeftActions={() =>
+        !!handleLeftPress && (
+          <ActionButton
+            side="left"
+            icon={leftIcon}
+            onPress={() => {
+              handleLeftPress()
+              ref?.current?.close()
+            }}
+          />
+        )
+      }
+      renderRightActions={() =>
+        !!handleRightPress && (
+          <ActionButton
+            side="right"
+            icon={DELETE_ICON}
+            onPress={() => {
+              handleRightPress()
+              ref?.current?.close()
+            }}
+          />
+        )
+      }
     >
       <Box
         flex={1}

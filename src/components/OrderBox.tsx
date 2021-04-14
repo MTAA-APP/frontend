@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import { Image } from 'react-native'
 
@@ -6,33 +6,54 @@ import { Box, Text, ActionButton } from 'ui'
 
 import PLACEHOLDER from 'assets/images/image-placeholder.png'
 import CROSS_ICON from 'assets/icons/cross.png'
-import READY_ICON from 'assets/icons/ready.png'
 
 type Props = {
   title?: string
   description?: string
+  leftIcon: number
+  handleLeftPress?: () => void
+  handleRightPress?: () => void
 }
 
-const OrderBox = ({ title, description }: Props) => {
+const OrderBox = ({
+  title,
+  description,
+  leftIcon,
+  handleLeftPress,
+  handleRightPress,
+}: Props) => {
+  const ref = useRef<Swipeable>(null)
+
   return (
     <Swipeable
+      ref={ref}
       containerStyle={{ overflow: 'visible' }}
-      renderLeftActions={() => (
-        <ActionButton
-          variant="secondary"
-          side="left"
-          icon={READY_ICON}
-          onPress={() => console.log('close')}
-        />
-      )}
-      renderRightActions={() => (
-        <ActionButton
-          variant="secondary"
-          side="right"
-          icon={CROSS_ICON}
-          onPress={() => console.log('close')}
-        />
-      )}
+      renderLeftActions={() =>
+        !!handleLeftPress && (
+          <ActionButton
+            variant="secondary"
+            side="left"
+            icon={leftIcon}
+            onPress={() => {
+              handleLeftPress()
+              ref?.current?.close()
+            }}
+          />
+        )
+      }
+      renderRightActions={() =>
+        !!handleRightPress && (
+          <ActionButton
+            variant="secondary"
+            side="right"
+            icon={CROSS_ICON}
+            onPress={() => {
+              handleRightPress()
+              ref?.current?.close()
+            }}
+          />
+        )
+      }
     >
       <Box
         flex={1}

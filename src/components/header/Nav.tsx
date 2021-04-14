@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Image } from 'react-native'
 
 import { RootStackParamList } from 'types/stack'

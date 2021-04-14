@@ -1,6 +1,6 @@
 import React from 'react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Image } from 'react-native'
 
 import ARROW_BACK_ICON from 'assets/icons/arrow-back.png'

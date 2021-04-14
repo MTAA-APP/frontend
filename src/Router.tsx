@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import AppLoading from 'expo-app-loading'
 
 import { RootStackParamList } from 'types/stack'
-import { Title, Menu, Back } from 'components'
+import { Title, Nav, Back } from 'components'
 import { useContext } from 'hooks'
 import { Role } from 'types/enums'
 import {
@@ -16,6 +16,15 @@ import {
   ServiceSignUp,
   Services,
   Orders,
+  Service,
+  Menu,
+  Cart,
+  CustomerProfile,
+  Order,
+  MyOrders,
+  MyMenu,
+  ServiceProfile,
+  ItemDetail,
 } from 'screens'
 
 import { Theme } from 'styles/theme'
@@ -60,23 +69,73 @@ const Router = () => {
         screenOptions={{
           headerTitle: (props) => <Title {...props} />,
           headerLeft: () => <Back />,
-          headerRight: () => <Menu />,
+          headerRight: () => <Nav />,
           ...screenOptionsStyle,
         }}
       >
         {isLogged ? (
           user?.role === Role.SERVICE ? (
-            <Stack.Screen
-              name="Orders"
-              component={Orders}
-              options={{ headerLeft: () => false }}
-            />
+            <>
+              <Stack.Screen
+                name="Orders"
+                component={Orders}
+                options={{ headerLeft: () => false }}
+              />
+
+              <Stack.Screen
+                name="Order"
+                component={Order}
+                options={{ headerTitle: () => false }}
+              />
+
+              <Stack.Screen
+                name="MyMenu"
+                component={MyMenu}
+                options={{ headerLeft: () => false }}
+              />
+
+              <Stack.Screen
+                name="ServiceProfile"
+                component={ServiceProfile}
+                options={{ headerLeft: () => false }}
+              />
+            </>
           ) : (
-            <Stack.Screen
-              name="Services"
-              component={Services}
-              options={{ headerLeft: () => false, headerTitle: () => false }}
-            />
+            <>
+              <Stack.Screen
+                name="Services"
+                component={Services}
+                options={{ headerLeft: () => false, headerTitle: () => false }}
+              />
+
+              <Stack.Screen
+                name="Service"
+                component={Service}
+                options={{ headerTitle: () => false }}
+              />
+
+              <Stack.Screen name="Menu" component={Menu} />
+
+              <Stack.Screen
+                name="ItemDetail"
+                component={ItemDetail}
+                options={{ headerTitle: () => false }}
+              />
+
+              <Stack.Screen name="Cart" component={Cart} />
+
+              <Stack.Screen
+                name="MyOrders"
+                component={MyOrders}
+                options={{ headerTitle: () => false }}
+              />
+
+              <Stack.Screen
+                name="CustomerProfile"
+                component={CustomerProfile}
+                options={{ headerLeft: () => false }}
+              />
+            </>
           )
         ) : (
           <>

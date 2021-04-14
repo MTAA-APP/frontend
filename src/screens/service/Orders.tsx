@@ -2,13 +2,15 @@ import React from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { FlatList, RefreshControl } from 'react-native'
 import { useQuery } from '@apollo/client'
-import { Order } from 'types/datamodels'
 
 import { RootStackParamList } from 'types/stack'
 import { Box, NoData } from 'ui'
 import { OrderBox } from 'components'
+import { Order } from 'types/datamodels'
 
 import { GET_ORDERS } from 'apollo/queries'
+
+import READY_ICON from 'assets/icons/ready.png'
 
 type Props = StackScreenProps<RootStackParamList, 'Orders'>
 
@@ -36,6 +38,9 @@ const Orders = ({ navigation }: Props) => {
           <OrderBox
             title={item?.customer?.email}
             description="Lorem ipsum dolor sit amet"
+            leftIcon={READY_ICON}
+            handleLeftPress={() => console.log('left')}
+            handleRightPress={() => console.log('right')}
           />
         )}
       />
