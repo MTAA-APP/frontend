@@ -12,6 +12,10 @@ import BURGER_ICON from 'assets/icons/menu.png'
 import CROSS_ICON from 'assets/icons/cross.png'
 import LOGOUT_ICON from 'assets/icons/logout.png'
 import HOME_ICON from 'assets/icons/home.png'
+import CART_ICON from 'assets/icons/cart.png'
+import PROFILE_ICON from 'assets/icons/person.png'
+import ORDERS_ICON from 'assets/icons/orders.png'
+import ITEMS_ICON from 'assets/icons/items.png'
 
 const Menu = () => {
   const navigation = useNavigation()
@@ -61,6 +65,62 @@ const Menu = () => {
             <Image
               source={HOME_ICON}
               style={{ width: 16, height: 18 }}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+
+          {user?.role === Role.CUSTOMER && (
+            <TouchableOpacity
+              style={{ padding: 16 }}
+              onPress={() => navigate('Cart')}
+            >
+              <Image
+                source={CART_ICON}
+                style={{ width: 18, height: 18 }}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          )}
+
+          {user?.role === Role.CUSTOMER && (
+            <TouchableOpacity
+              style={{ padding: 16 }}
+              onPress={() => navigate('MyOrders')}
+            >
+              <Image
+                source={ORDERS_ICON}
+                style={{ width: 16, height: 17 }}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          )}
+
+          {user?.role === Role.SERVICE && (
+            <TouchableOpacity
+              style={{ padding: 16 }}
+              onPress={() => navigate('MyMenu')}
+            >
+              <Image
+                source={ITEMS_ICON}
+                style={{ width: 17, height: 13 }}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          )}
+
+          <TouchableOpacity
+            style={{ padding: 16 }}
+            onPress={() =>
+              navigate(
+                user?.role === Role.SERVICE
+                  ? 'ServiceProfile'
+                  : 'CustomerProfile'
+              )
+            }
+          >
+            <Image
+              source={PROFILE_ICON}
+              style={{ width: 16, height: 16 }}
               resizeMode="contain"
             />
           </TouchableOpacity>

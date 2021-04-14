@@ -31,10 +31,12 @@ const initialValues: FormValues = {
   password: '',
 }
 
+type MutationProps = { signin: AuthPayload }
+
 // TODO: errors
 
 const SignIn = ({ navigation }: Props) => {
-  const [signin] = useMutation<{ signin: AuthPayload }>(SIGN_IN)
+  const [signin] = useMutation<MutationProps>(SIGN_IN)
 
   const { login } = useContext('auth')
 
@@ -90,7 +92,11 @@ const SignIn = ({ navigation }: Props) => {
                   component={Input}
                 />
 
-                <Button title="Sign In" onPress={handleSubmit} />
+                <Button
+                  style={{ marginTop: 16 }}
+                  title="Sign In"
+                  onPress={handleSubmit}
+                />
               </>
             )}
           </Formik>

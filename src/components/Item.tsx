@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import { Image } from 'react-native'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 import { Box, Text, ActionButton } from 'ui'
 
@@ -13,6 +14,7 @@ type Props = {
   description?: string
   picture?: string
   leftIcon: number
+  handlePress: () => void
   handleLeftPress?: () => void
   handleRightPress?: () => void
 }
@@ -23,6 +25,7 @@ const Item = ({
   description,
   picture,
   leftIcon,
+  handlePress,
   handleLeftPress,
   handleRightPress,
 }: Props) => {
@@ -57,34 +60,36 @@ const Item = ({
         )
       }
     >
-      <Box
-        flex={1}
-        flexDirection="row"
-        borderRadius={16}
-        height={130}
-        backgroundColor="white"
-        marginHorizontal="xl"
-        marginVertical="s"
-        elevation={5}
-      >
-        <Box flex={1} padding="m" flexDirection="column">
-          <Text variant="item" marginBottom="xs">
-            {title}
-          </Text>
+      <TouchableWithoutFeedback onPress={handlePress}>
+        <Box
+          flex={1}
+          flexDirection="row"
+          borderRadius={16}
+          height={130}
+          backgroundColor="white"
+          marginHorizontal="xl"
+          marginVertical="s"
+          elevation={5}
+        >
+          <Box flex={1} padding="m" flexDirection="column">
+            <Text variant="item" marginBottom="xs">
+              {title}
+            </Text>
 
-          {!!description && <Text>{description}</Text>}
+            {!!description && <Text>{description}</Text>}
+          </Box>
+
+          <Image
+            source={PLACEHOLDER}
+            style={{
+              width: 130,
+              height: '100%',
+              borderRadius: 16,
+            }}
+            resizeMode="cover"
+          />
         </Box>
-
-        <Image
-          source={PLACEHOLDER}
-          style={{
-            width: 130,
-            height: '100%',
-            borderRadius: 16,
-          }}
-          resizeMode="cover"
-        />
-      </Box>
+      </TouchableWithoutFeedback>
     </Swipeable>
   )
 }
