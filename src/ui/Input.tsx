@@ -22,7 +22,7 @@ const Input = ({
 }: Props) => {
   const theme = useTheme<Theme>()
 
-  const onChangeText = useCallback(onChange(name), [])
+  const onChangeText = useCallback(onChange(name), [onChange, name])
 
   return (
     <Box marginBottom="m">

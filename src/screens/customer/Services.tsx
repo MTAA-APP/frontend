@@ -38,18 +38,23 @@ const Services = ({ navigation }: Props) => {
   const [removeFavorite] = useMutation(DELETE_SERVICE)
   const [addFavorite] = useMutation(UPDATE_FAVORITE)
 
-  const handleRemove = useCallback((id: string) => {
-    removeFavorite({ variables: { id } })
-      .then(() => refetch())
-      .catch((err) => console.log('Error', err))
-  }, [])
+  const handleRemove = useCallback(
+    (id: string) => {
+      removeFavorite({ variables: { id } })
+        .then(() => refetch())
+        .catch((err) => console.log('Error', err))
+    },
+    [refetch]
+  )
 
-  const handleAdd = useCallback((id: string) => {
-    // TODO: fix
-    addFavorite({ variables: { body: id } })
-      .then(() => refetch())
-      .catch((err) => console.log('Error', err))
-  }, [])
+  const handleAdd = useCallback(
+    (id: string) => {
+      addFavorite({ variables: { body: { id } } })
+        .then(() => refetch())
+        .catch((err) => console.log('Error', err))
+    },
+    [refetch]
+  )
 
   useEffect(() => {
     const timeout = setTimeout(refetch, 800)
@@ -93,10 +98,7 @@ const Services = ({ navigation }: Props) => {
           </TouchableOpacity>
         </Box>
 
-        <Search
-          value={search}
-          onChangeText={(value: string) => setSearch(value)}
-        />
+        <Search value={search} onChangeText={setSearch} />
 
         <RowSelect
           selected={category}

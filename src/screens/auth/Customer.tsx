@@ -65,8 +65,8 @@ const Customer = ({ navigation }: Props) => {
         style={{
           flex: 1,
           width: '100%',
-          borderBottomLeftRadius: 16,
-          borderBottomRightRadius: 16,
+          borderBottomLeftRadius: 18,
+          borderBottomRightRadius: 18,
         }}
         resizeMode="cover"
       />

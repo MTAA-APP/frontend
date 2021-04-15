@@ -6,7 +6,7 @@ import { Field, Formik } from 'formik'
 import AppLoading from 'expo-app-loading'
 
 import { RootStackParamList } from 'types/stack'
-import { Box, Button, Input, Text } from 'ui'
+import { Box, Button, Input } from 'ui'
 import { Customer } from 'types/datamodels'
 
 import { GET_CUSTOMER_PROFILE } from 'apollo/queries'
@@ -28,7 +28,7 @@ const validationSchema = Yup.object().shape({
   phone: Yup.string().required(),
 })
 
-type QueryType = { getCustomerProfile: Customer }
+type QueryType = { profile: Customer }
 type MutationType = { updateCustomer: Customer }
 
 const Profile = ({ navigation }: Props) => {
@@ -37,10 +37,10 @@ const Profile = ({ navigation }: Props) => {
 
   const initialValues: FormValues = useMemo(
     () => ({
-      email: data?.getCustomerProfile?.email || '',
-      firstName: data?.getCustomerProfile?.firstName || '',
-      lastName: data?.getCustomerProfile?.lastName || '',
-      phone: data?.getCustomerProfile?.phone || '',
+      email: data?.profile?.email || '',
+      firstName: data?.profile?.firstName || '',
+      lastName: data?.profile?.lastName || '',
+      phone: data?.profile?.phone || '',
     }),
     [data]
   )
@@ -99,4 +99,4 @@ const Profile = ({ navigation }: Props) => {
   )
 }
 
-export default Profile
+export default React.memo(Profile)
