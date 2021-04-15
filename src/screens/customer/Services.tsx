@@ -9,11 +9,12 @@ import { Box, NoData, RowSelect, Search, Text } from 'ui'
 import { Item } from 'components'
 import { Service } from 'types/datamodels'
 import { ServiceCategory } from 'types/enums'
+import { SERVICE_CATEGORY } from 'constants/enums'
 
 import { GET_SERVICES } from 'apollo/queries'
 import { DELETE_SERVICE, UPDATE_FAVORITE } from 'apollo/mutations'
 
-import STAR_ICON from 'assets/icons/star.png'
+import WHITE_STAR_ICON from 'assets/icons/white-star.png'
 
 type Props = StackScreenProps<RootStackParamList, 'Home'>
 
@@ -34,18 +35,18 @@ const Services = ({ navigation }: Props) => {
     },
   })
 
-  const [removeService] = useMutation(DELETE_SERVICE)
-  const [addService] = useMutation(UPDATE_FAVORITE)
+  const [removeFavorite] = useMutation(DELETE_SERVICE)
+  const [addFavorite] = useMutation(UPDATE_FAVORITE)
 
   const handleRemove = useCallback((id: string) => {
-    removeService({ variables: { id } })
+    removeFavorite({ variables: { id } })
       .then(() => refetch())
       .catch((err) => console.log('Error', err))
   }, [])
 
   const handleAdd = useCallback((id: string) => {
     // TODO: fix
-    addService({ variables: { body: id } })
+    addFavorite({ variables: { body: id } })
       .then(() => refetch())
       .catch((err) => console.log('Error', err))
   }, [])
@@ -64,7 +65,7 @@ const Services = ({ navigation }: Props) => {
       <Box padding="xl" paddingTop="xxxl">
         <Box
           flexDirection="row"
-          marginBottom="xl"
+          marginBottom="l"
           justifyContent="space-between"
           alignItems="center"
         >
@@ -75,16 +76,16 @@ const Services = ({ navigation }: Props) => {
               accessible
               width={30}
               height={30}
-              backgroundColor={favorites ? 'primary' : 'selected'}
+              backgroundColor={favorites ? 'primary' : 'label'}
               borderRadius={8}
               alignItems="center"
               justifyContent="center"
             >
               <Image
-                source={STAR_ICON}
+                source={WHITE_STAR_ICON}
                 style={{
-                  height: 16,
-                  width: 16,
+                  height: 12,
+                  width: 12,
                 }}
                 resizeMode="contain"
               />
@@ -120,9 +121,9 @@ const Services = ({ navigation }: Props) => {
         renderItem={({ item }) => (
           <Item
             title={item?.name}
-            description={item?.description}
+            description={SERVICE_CATEGORY[item?.category]}
             picture={item?.picture}
-            leftIcon={STAR_ICON}
+            leftIcon={WHITE_STAR_ICON}
             handlePress={() => navigation.navigate('Service', { id: item?.id })}
             {...(item?.customers?.length
               ? {

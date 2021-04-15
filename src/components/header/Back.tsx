@@ -15,6 +15,7 @@ const Back = () => {
         padding: 8,
         marginLeft: 22,
         marginTop: 28,
+        zIndex: 50,
       }}
     >
       <Image source={ARROW_BACK_ICON} style={{ width: 9, height: 17 }} />

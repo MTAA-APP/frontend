@@ -5,15 +5,15 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 import { Box, Text, ActionButton } from 'ui'
 
-import PLACEHOLDER from 'assets/images/image-placeholder.png'
 import DELETE_ICON from 'assets/icons/delete.png'
+import STAR_ICON from 'assets/icons/star.png'
 
 type Props = {
   variant?: 'primary' | 'secondary'
   title: string
   description?: string
   picture?: string
-  leftIcon: number
+  leftIcon?: number
   handlePress: () => void
   handleLeftPress?: () => void
   handleRightPress?: () => void
@@ -39,7 +39,8 @@ const Item = ({
         !!handleLeftPress && (
           <ActionButton
             side="left"
-            icon={leftIcon}
+            icon={leftIcon || STAR_ICON}
+            backgroundColor="secondary"
             onPress={() => {
               handleLeftPress()
               ref?.current?.close()
@@ -51,6 +52,7 @@ const Item = ({
         !!handleRightPress && (
           <ActionButton
             side="right"
+            backgroundColor="primary"
             icon={DELETE_ICON}
             onPress={() => {
               handleRightPress()
@@ -64,14 +66,15 @@ const Item = ({
         <Box
           flex={1}
           flexDirection="row"
-          borderRadius={16}
+          alignItems="center"
+          borderRadius={30}
           height={130}
           backgroundColor="white"
           marginHorizontal="xl"
           marginVertical="s"
-          elevation={5}
+          elevation={1}
         >
-          <Box flex={1} padding="m" flexDirection="column">
+          <Box flex={1} height="100%" padding="l" flexDirection="column">
             <Text variant="item" marginBottom="xs">
               {title}
             </Text>
@@ -80,13 +83,14 @@ const Item = ({
           </Box>
 
           <Image
-            source={PLACEHOLDER}
+            source={{ uri: picture }}
             style={{
               width: 130,
-              height: '100%',
-              borderRadius: 16,
+              height: variant === 'secondary' ? '80%' : '100%',
+              borderRadius: 30,
+              marginRight: variant === 'secondary' ? -10 : 0,
             }}
-            resizeMode="cover"
+            resizeMode={variant === 'secondary' ? 'center' : 'cover'}
           />
         </Box>
       </TouchableWithoutFeedback>

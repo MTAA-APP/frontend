@@ -19,7 +19,12 @@ const Search = ({ value, onChangeText }: Props) => {
   const theme = useTheme<Theme>()
 
   return (
-    <Box height={24} flexDirection="row" marginBottom="xl" position="relative">
+    <Box
+      flexDirection="row"
+      alignItems="flex-end"
+      marginBottom="xl"
+      position="relative"
+    >
       <Image
         source={SEARCH_ICON}
         style={{
@@ -32,19 +37,23 @@ const Search = ({ value, onChangeText }: Props) => {
 
       <TextInput
         onChangeText={(value: string) => onChangeText(value)}
+        placeholder="Search..."
+        placeholderTextColor="#C3C8D3"
         value={value}
         style={{
           flex: 1,
           color: theme.colors.title,
-          borderBottomColor: '#DBDCDD',
+          borderBottomColor: '#E2E3E5',
+          fontSize: 15,
           borderStyle: 'solid',
-          paddingBottom: 5,
+          marginTop: 0,
+          paddingBottom: 3,
           borderBottomWidth: 1,
         }}
       />
 
       {!!value && (
-        <Box position="absolute" right={0} bottom={8}>
+        <Box position="absolute" right={0} bottom={10}>
           <TouchableOpacity onPress={() => onChangeText(undefined!)}>
             <Image
               source={CROSS_ICON}

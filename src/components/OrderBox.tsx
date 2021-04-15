@@ -36,6 +36,7 @@ const OrderBox = ({
           <ActionButton
             variant="secondary"
             side="left"
+            backgroundColor="secondary"
             icon={leftIcon}
             onPress={() => {
               handleLeftPress()
@@ -49,6 +50,7 @@ const OrderBox = ({
           <ActionButton
             variant="secondary"
             side="right"
+            backgroundColor="primary"
             icon={CROSS_ICON}
             onPress={() => {
               handleRightPress()

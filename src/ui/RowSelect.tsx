@@ -9,7 +9,7 @@ import { SERVICE_CATEGORY } from 'constants/enums'
 
 type Props = {
   items: ServiceCategory[]
-  selected: ServiceCategory | undefined
+  selected?: ServiceCategory
   handleSelect: (category?: ServiceCategory) => void
 }
 
@@ -28,14 +28,17 @@ const RowSelect = ({ items, selected, handleSelect }: Props) => {
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => handleSelect(item)}>
             <Box
-              accessible
-              paddingVertical="xs"
-              paddingHorizontal="m"
-              borderRadius={16}
+              paddingVertical="s"
+              paddingHorizontal="l"
               marginRight="s"
-              backgroundColor={item === selected ? 'selected' : 'label'}
+              borderRadius={22}
+              backgroundColor={item === selected ? 'primary' : 'white'}
             >
-              <Text color="title" fontSize={10}>
+              <Text
+                fontFamily="Rubik_500Medium"
+                color={item === selected ? 'white' : 'title'}
+                fontSize={12}
+              >
                 {item ? SERVICE_CATEGORY[item] : 'All'}
               </Text>
             </Box>

@@ -10,11 +10,9 @@ import { Service } from 'types/datamodels'
 
 import { GET_SERVICE } from 'apollo/queries'
 
-import PLACEHOLDER from 'assets/images/image-placeholder.png'
-
 type Props = StackScreenProps<RootStackParamList, 'Service'>
 
-type QueryType = { getService: Service }
+type QueryType = { service: Service }
 
 const ServiceDetail = ({ navigation, route: { params } }: Props) => {
   const { data, loading, error } = useQuery<QueryType>(GET_SERVICE, {
@@ -27,7 +25,7 @@ const ServiceDetail = ({ navigation, route: { params } }: Props) => {
     <>
       <Box flex={1}>
         <Image
-          source={PLACEHOLDER}
+          source={{ uri: data?.service?.picture }}
           style={{
             flex: 1,
             width: '100%',
@@ -42,8 +40,8 @@ const ServiceDetail = ({ navigation, route: { params } }: Props) => {
       </Box>
 
       <Box flex={2} padding="xl" paddingTop="xxl">
-        <Text variant="title">{data?.getService?.name}</Text>
-        <Text marginBottom="xl">{data?.getService?.description}</Text>
+        <Text variant="title">{data?.service?.name}</Text>
+        <Text marginBottom="xl">{data?.service?.description}</Text>
 
         <Text variant="subtitle" marginBottom="m">
           Opening Hours

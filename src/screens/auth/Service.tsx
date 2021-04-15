@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { Formik, Field } from 'formik'
 import * as Yup from 'yup'
@@ -6,10 +6,12 @@ import { Image } from 'react-native'
 import { useMutation } from '@apollo/client'
 
 import { RootStackParamList } from 'types/stack'
-import { Box, Text, Input, Button, BottomInfo } from 'ui'
+import { Box, Text, Input, Button, BottomInfo, Select } from 'ui'
 import { useContext } from 'hooks'
 import { AuthPayload } from 'types/datamodels'
+import { SERVICE_CATEGORY } from 'constants/enums'
 import { ServiceCategory } from 'types/enums'
+import { SelectItem } from 'types/global'
 
 import { SERVICE_SIGNUP } from 'apollo/mutations'
 
@@ -42,11 +44,12 @@ const initialValues: FormValues = {
   confirm: '',
 }
 
+type MutationType = { serviceSignup: AuthPayload }
+
 // TODO: errors
-// TODO: category select
 
 const Service = ({ navigation }: Props) => {
-  const [signup] = useMutation<{ serviceSignup: AuthPayload }>(SERVICE_SIGNUP)
+  const [signup] = useMutation<MutationType>(SERVICE_SIGNUP)
 
   const { login } = useContext('auth')
 
@@ -59,6 +62,15 @@ const Service = ({ navigation }: Props) => {
       .catch((err) => console.log('Error', err))
   }, [])
 
+  const categoryItems: SelectItem[] = useMemo(
+    () =>
+      Object.values(ServiceCategory)?.map((item) => ({
+        label: SERVICE_CATEGORY[item],
+        value: item,
+      })),
+    []
+  )
+
   return (
     <>
       <Image
@@ -66,8 +78,8 @@ const Service = ({ navigation }: Props) => {
         style={{
           flex: 1,
           width: '100%',
-          borderBottomLeftRadius: 16,
-          borderBottomRightRadius: 16,
+          borderBottomLeftRadius: 18,
+          borderBottomRightRadius: 18,
         }}
         resizeMode="cover"
       />
@@ -89,6 +101,13 @@ const Service = ({ navigation }: Props) => {
             {({ handleSubmit }) => (
               <>
                 <Field type="text" name="name" label="Name" component={Input} />
+
+                <Field
+                  name="category"
+                  label="Category"
+                  items={categoryItems}
+                  component={Select}
+                />
 
                 <Field
                   keyboardType="email-address"

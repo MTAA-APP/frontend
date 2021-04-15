@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 export default gql`
   query getService($id: ID!) {
-    getService(id: $id) @rest(type: "Service", path: "/services/{args.id}") {
+    service(id: $id) @rest(type: "Service", path: "/services/{args.id}") {
       id
       email
       name

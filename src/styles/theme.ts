@@ -21,6 +21,7 @@ const theme = createTheme({
     title: palette.darkGrey,
     background: palette.lightGrey,
     primary: palette.red,
+    secondary: palette.green,
     label: palette.grey,
     transparent: palette.transparent,
     selected: palette.selected,
@@ -60,8 +61,8 @@ const theme = createTheme({
     body: {
       fontFamily: 'Rubik_400Regular',
       fontWeight: '400',
-      fontSize: 15,
-      lineHeight: 21,
+      fontSize: 14,
+      lineHeight: 18,
       color: 'label',
     },
     label: {
@@ -86,7 +87,7 @@ const theme = createTheme({
     item: {
       fontFamily: 'Rubik_500Medium',
       fontWeight: '500',
-      fontSize: 22,
+      fontSize: 20,
       lineHeight: 26,
       color: 'title',
     },

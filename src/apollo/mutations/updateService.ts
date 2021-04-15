@@ -1,18 +1,18 @@
 import { gql } from '@apollo/client'
 
 export default gql`
-  mutation updateCustomer($body: UpdateCustomerBody!) {
-    updateCustomer: publish(body: $body)
+  mutation updateService($body: UpdateServiceBody!) {
+    updateService: publish(body: $body)
       @rest(
-        type: "Customer"
+        type: "Service"
         method: "PUT"
-        path: "/profile/customer"
+        path: "/profile/service"
         bodyKey: "body"
       ) {
-      firstName
-      lastName
+      picture
+      name
       phone
-      payment
+      web
     }
   }
 `

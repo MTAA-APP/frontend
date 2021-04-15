@@ -1,10 +1,13 @@
 import React from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Image } from 'react-native'
+import { BoxProps } from '@shopify/restyle'
 
 import Box from './Box'
 
-type Props = {
+import { Theme } from 'styles/theme'
+
+type Props = BoxProps<Theme> & {
   side?: 'left' | 'right'
   variant?: 'primary' | 'secondary'
   icon: number
@@ -16,6 +19,7 @@ const ActionButton = ({
   variant = 'primary',
   icon,
   onPress,
+  ...rest
 }: Props) => (
   <TouchableOpacity
     onPress={onPress}
@@ -24,11 +28,10 @@ const ActionButton = ({
     }}
   >
     <Box
-      accessible
+      {...rest}
       height={variant === 'secondary' ? 85 : 130}
       width={variant === 'secondary' ? 54 : 85}
-      borderRadius={16}
-      backgroundColor="label"
+      borderRadius={30}
       marginVertical="s"
       justifyContent="center"
       alignItems="center"

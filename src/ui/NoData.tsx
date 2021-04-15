@@ -12,13 +12,17 @@ type Props = {
   loading?: boolean
 }
 
-// TODO: loading
-
 const NoData = ({ text, loading = true }: Props) =>
   loading ? (
     <AppLoading />
   ) : (
-    <Box flex={1} justifyContent="center" alignItems="center" padding="xl">
+    <Box
+      flex={1}
+      justifyContent="center"
+      alignItems="center"
+      paddingVertical="xxl"
+      padding="xl"
+    >
       <Image
         source={EMPTY_ICON}
         style={{ width: 35, height: 34, marginBottom: 10 }}

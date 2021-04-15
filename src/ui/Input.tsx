@@ -33,7 +33,7 @@ const Input = ({
         style={{
           ...theme.textVariants.input,
           color: theme.colors.title,
-          borderBottomColor: '#DBDCDD',
+          borderBottomColor: '#E2E3E5',
           borderStyle: 'solid',
           borderBottomWidth: 1,
           paddingVertical: 4,

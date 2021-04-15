@@ -27,6 +27,7 @@
     "@expo-google-fonts/rubik": "^0.1.0",
     "@react-native-async-storage/async-storage": "^1.15.2",
     "@react-native-community/masked-view": "0.1.10",
+    "@react-native-picker/picker": "^1.15.0",
     "@react-navigation/native": "^5.9.3",
     "@react-navigation/stack": "^5.14.3",
     "@shopify/restyle": "^1.4.0",
@@ -50,7 +51,8 @@
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.9",
     "react-native-screens": "~2.15.2",
-    "react-native-svg": "12.1.0",
+    "react-native-shadow": "^1.2.2",
+    "react-native-svg": "^12.1.1-0",
     "react-native-web": "~0.13.12",
     "yup": "^0.32.9"
   },

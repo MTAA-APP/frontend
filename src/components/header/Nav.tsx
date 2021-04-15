@@ -9,7 +9,7 @@ import { useContext, useToggle } from 'hooks'
 import { Role } from 'types/enums'
 
 import BURGER_ICON from 'assets/icons/menu.png'
-import CROSS_ICON from 'assets/icons/cross.png'
+import CLOSE_ICON from 'assets/icons/close.png'
 import LOGOUT_ICON from 'assets/icons/logout.png'
 import HOME_ICON from 'assets/icons/home.png'
 import CART_ICON from 'assets/icons/cart.png'
@@ -35,22 +35,19 @@ const Menu = () => {
     <Box position="relative" style={{ marginRight: 22, marginTop: 28 }}>
       {isVisible && (
         <Box
-          backgroundColor="selected"
+          backgroundColor="title"
           alignItems="center"
           position="absolute"
           padding="s"
           top={-18}
           right={-12}
           zIndex={100}
-          elevation={20}
+          elevation={30}
           borderRadius={200}
         >
-          <TouchableOpacity
-            style={{ padding: 16, marginBottom: 4 }}
-            onPress={hide}
-          >
+          <TouchableOpacity style={{ padding: 16 }} onPress={hide}>
             <Image
-              source={CROSS_ICON}
+              source={CLOSE_ICON}
               style={{ width: 20, height: 20 }}
               resizeMode="contain"
             />
@@ -64,7 +61,7 @@ const Menu = () => {
           >
             <Image
               source={HOME_ICON}
-              style={{ width: 16, height: 18 }}
+              style={{ width: 18, height: 18 }}
               resizeMode="contain"
             />
           </TouchableOpacity>
@@ -89,7 +86,7 @@ const Menu = () => {
             >
               <Image
                 source={ORDERS_ICON}
-                style={{ width: 16, height: 17 }}
+                style={{ width: 18, height: 18 }}
                 resizeMode="contain"
               />
             </TouchableOpacity>
@@ -102,7 +99,7 @@ const Menu = () => {
             >
               <Image
                 source={ITEMS_ICON}
-                style={{ width: 17, height: 13 }}
+                style={{ width: 18, height: 18 }}
                 resizeMode="contain"
               />
             </TouchableOpacity>
@@ -120,7 +117,7 @@ const Menu = () => {
           >
             <Image
               source={PROFILE_ICON}
-              style={{ width: 16, height: 16 }}
+              style={{ width: 18, height: 18 }}
               resizeMode="contain"
             />
           </TouchableOpacity>
