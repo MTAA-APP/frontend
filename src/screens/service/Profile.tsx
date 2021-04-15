@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import * as Yup from 'yup'
 import { useMutation, useQuery } from '@apollo/client'
+import { Image } from 'react-native'
 import { Field, Formik } from 'formik'
 
 import { RootStackParamList } from 'types/stack'
@@ -16,7 +17,6 @@ import AppLoading from 'expo-app-loading'
 type Props = StackScreenProps<RootStackParamList, 'ServiceProfile'>
 
 type FormValues = {
-  picture: string
   email: string
   name: string
   phone: string
@@ -40,7 +40,6 @@ const Profile = ({ navigation }: Props) => {
 
   const initialValues: FormValues = useMemo(
     () => ({
-      picture: data?.getServiceProfile?.picture || '',
       email: data?.getServiceProfile?.email || '',
       name: data?.getServiceProfile?.name || '',
       phone: data?.getServiceProfile?.phone || '',
@@ -58,7 +57,19 @@ const Profile = ({ navigation }: Props) => {
   if (loading) return <AppLoading />
 
   return (
-    <Box padding="xl" marginTop="xxxl">
+    <Box flex={1}>
+      <Box padding="l" marginTop="xxxl" flex={1}>
+        <Text paddingBottom="s" variant="label">Picture</Text>
+        <Image
+          source={{ uri: data?.getServiceProfile?.picture }}
+          style={{
+            width: '100%',
+            height: '75%'
+          }}
+          resizeMode="cover"
+        />
+      </Box>
+      <Box padding="xl" >
       <Formik
         {...{ initialValues, onSubmit, validationSchema }}
         validateOnChange
@@ -104,7 +115,8 @@ const Profile = ({ navigation }: Props) => {
           </>
         )}
       </Formik>
-    </Box>
+      </Box>
+      </Box>
   )
 }
 
