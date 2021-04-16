@@ -91,7 +91,7 @@ const Router = () => {
               <Stack.Screen
                 name="MyMenu"
                 component={MyMenu}
-                options={{ headerLeft: () => false }}
+                options={{ headerLeft: () => false, title: 'My Menu' }}
               />
 
               <Stack.Screen
