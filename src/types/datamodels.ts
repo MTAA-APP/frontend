@@ -84,8 +84,8 @@ export type Order = {
   owner?: Customer
   payment: Payment
   status: Status
-  completedAt?: DateTime
-  createdAt: DateTime
+  completedAt?: string
+  createdAt: string
 }
 
 export type OrderItem = {

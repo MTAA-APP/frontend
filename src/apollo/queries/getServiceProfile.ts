@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 export default gql`
   query getServiceProfile {
-    getServiceProfile @rest(type: "Service", path: "/profile/service") {
+    service @rest(type: "Service", path: "/profile/service") {
       picture
       email
       name

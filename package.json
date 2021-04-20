@@ -53,12 +53,13 @@
     "react-native-screens": "~2.15.2",
     "react-native-shadow": "^1.2.2",
     "react-native-svg": "^12.1.1-0",
+    "react-native-swipe-gestures": "^1.0.5",
     "react-native-web": "~0.13.12",
     "yup": "^0.32.9"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
-    "@types/luxon": "^1.26.3",
+    "@types/luxon": "^1.26.4",
     "@types/react": "~16.9.35",
     "@types/react-dom": "~16.9.8",
     "@types/react-native": "~0.63.2",

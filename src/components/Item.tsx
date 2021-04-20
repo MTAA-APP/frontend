@@ -4,6 +4,7 @@ import { Image } from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 import { Box, Text, ActionButton } from 'ui'
+import { Children } from 'types/global'
 
 import DELETE_ICON from 'assets/icons/delete.png'
 import STAR_ICON from 'assets/icons/star.png'
@@ -17,6 +18,7 @@ type Props = {
   handlePress: () => void
   handleLeftPress?: () => void
   handleRightPress?: () => void
+  children?: Children
 }
 
 const Item = ({
@@ -28,6 +30,7 @@ const Item = ({
   handlePress,
   handleLeftPress,
   handleRightPress,
+  children,
 }: Props) => {
   const ref = useRef<Swipeable>(null)
 
@@ -80,6 +83,8 @@ const Item = ({
             </Text>
 
             {!!description && <Text>{description}</Text>}
+
+            {children}
           </Box>
 
           <Image

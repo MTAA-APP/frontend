@@ -46,20 +46,22 @@ const initialValues: FormValues = {
 
 type MutationType = { serviceSignup: AuthPayload }
 
-// TODO: errors
-
 const Service = ({ navigation }: Props) => {
   const [signup] = useMutation<MutationType>(SERVICE_SIGNUP)
 
   const { login } = useContext('auth')
+  const { show } = useContext('snackbar')
 
   const onSubmit = useCallback(({ confirm, ...values }: FormValues) => {
     signup({ variables: { body: values } })
       .then(({ data, errors }) => {
         if (!data?.serviceSignup || !!errors) throw Error()
         login(data?.serviceSignup?.token)
+        show({ text: 'Succesfully signed up', variant: 'success' })
       })
-      .catch((err) => console.log('Error', err))
+      .catch(() =>
+        show({ text: 'Email is already registered.', variant: 'error' })
+      )
   }, [])
 
   const categoryItems: SelectItem[] = useMemo(

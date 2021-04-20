@@ -11,10 +11,12 @@ import { Theme } from 'styles/theme'
 type Props = FieldProps &
   TextInputProps & {
     label: string
+    variant?: 'primary' | 'secondary'
   }
 
 const Input = ({
   label,
+  variant = 'primary',
   field: { name, value, onChange },
   form: { errors },
   meta,
@@ -32,7 +34,7 @@ const Input = ({
         {...{ value, onChangeText, ...rest }}
         style={{
           ...theme.textVariants.input,
-          color: theme.colors.title,
+          color: theme.colors[variant === 'secondary' ? 'label' : 'title'],
           borderBottomColor: '#E2E3E5',
           borderStyle: 'solid',
           borderBottomWidth: 1,

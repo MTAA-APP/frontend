@@ -7,6 +7,7 @@ import { useMutation, useQuery } from '@apollo/client'
 import { RootStackParamList } from 'types/stack'
 import { Box, NoData, RowSelect, Search, Text } from 'ui'
 import { Item } from 'components'
+import { useContext } from 'hooks'
 import { Service } from 'types/datamodels'
 import { ServiceCategory } from 'types/enums'
 import { SERVICE_CATEGORY } from 'constants/enums'
@@ -18,11 +19,13 @@ import WHITE_STAR_ICON from 'assets/icons/white-star.png'
 
 type Props = StackScreenProps<RootStackParamList, 'Home'>
 
-type QueryType = { getServices: Service[] }
+type QueryType = { services: Service[] }
 
 // TODO: shadows
 
 const Services = ({ navigation }: Props) => {
+  const { show } = useContext('snackbar')
+
   const [favorites, setFavorites] = useState<boolean>(false)
   const [search, setSearch] = useState<string>(undefined!)
   const [category, setCategory] = useState<ServiceCategory>(undefined!)
@@ -41,8 +44,16 @@ const Services = ({ navigation }: Props) => {
   const handleRemove = useCallback(
     (id: string) => {
       removeFavorite({ variables: { id } })
-        .then(() => refetch())
-        .catch((err) => console.log('Error', err))
+        .then(() => {
+          show({ text: 'Service removed from favorites', variant: 'success' })
+          refetch()
+        })
+        .catch(() =>
+          show({
+            text: 'Unable to remove service from favorites!',
+            variant: 'error',
+          })
+        )
     },
     [refetch]
   )
@@ -50,8 +61,16 @@ const Services = ({ navigation }: Props) => {
   const handleAdd = useCallback(
     (id: string) => {
       addFavorite({ variables: { body: { id } } })
-        .then(() => refetch())
-        .catch((err) => console.log('Error', err))
+        .then(() => {
+          refetch()
+          show({ text: 'Service added to favorites', variant: 'success' })
+        })
+        .catch(() =>
+          show({
+            text: 'Unable to add service to favorites!',
+            variant: 'error',
+          })
+        )
     },
     [refetch]
   )
@@ -64,6 +83,8 @@ const Services = ({ navigation }: Props) => {
   useEffect(() => {
     refetch()
   }, [favorites, category])
+
+  const keyExtractor = useCallback((item) => item?.id, [])
 
   return (
     <>
@@ -110,8 +131,8 @@ const Services = ({ navigation }: Props) => {
       </Box>
 
       <FlatList
-        data={data?.getServices}
-        keyExtractor={(item) => item?.id}
+        data={data?.services}
+        keyExtractor={keyExtractor}
         contentContainerStyle={{ paddingBottom: 30 }}
         refreshing={loading}
         refreshControl={

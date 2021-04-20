@@ -33,20 +33,24 @@ const initialValues: FormValues = {
 
 type MutationProps = { signin: AuthPayload }
 
-// TODO: errors
-
 const SignIn = ({ navigation }: Props) => {
   const [signin] = useMutation<MutationProps>(SIGN_IN)
 
   const { login } = useContext('auth')
+  const { show } = useContext('snackbar')
 
   const onSubmit = useCallback((values: FormValues) => {
     signin({ variables: { body: values } })
       .then(({ data, errors }) => {
         if (!data?.signin || !!errors) throw Error()
         login(data?.signin?.token)
+        show({ text: 'Successfully logged in', variant: 'success' })
       })
-      .catch((err) => console.log('Error', err))
+      .catch(({ networkError }) => {
+        if (networkError?.message?.includes('401'))
+          show({ text: 'Wrong password!', variant: 'error' })
+        else show({ text: 'Account not found!', variant: 'error' })
+      })
   }, [])
 
   return (

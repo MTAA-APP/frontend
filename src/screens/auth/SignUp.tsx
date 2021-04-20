@@ -56,12 +56,12 @@ const SignUp = ({ navigation }: Props) => {
 
       <Box flex={1} marginBottom="xl">
         <RoleBox
-          text="Customer Lorem ipsum dolor sit amet amer dur"
+          text="Sign up as a Customer and make your life easier when ordering food."
           onPress={() => navigation.navigate('CustomerSignUp')}
         />
 
         <RoleBox
-          text="Service Lorem ipsum dolor sit amet amer dur"
+          text="Sign up as Service and offer your services more efficiently."
           onPress={() => navigation.navigate('ServiceSignUp')}
         />
       </Box>

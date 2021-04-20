@@ -4,15 +4,16 @@ import * as Yup from 'yup'
 import { useMutation, useQuery } from '@apollo/client'
 import { Image } from 'react-native'
 import { Field, Formik } from 'formik'
+import AppLoading from 'expo-app-loading'
+import { ScrollView } from 'react-native-gesture-handler'
 
 import { RootStackParamList } from 'types/stack'
 import { Box, Button, Input, Text } from 'ui'
+import { useContext } from 'hooks'
+import { Service } from 'types/datamodels'
 
 import { GET_SERVICE_PROFILE } from 'apollo/queries'
 import { UPDATE_SERVICE } from 'apollo/mutations'
-
-import { Service } from 'types/datamodels'
-import AppLoading from 'expo-app-loading'
 
 type Props = StackScreenProps<RootStackParamList, 'ServiceProfile'>
 
@@ -25,98 +26,98 @@ type FormValues = {
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email().required(),
-  firstName: Yup.string().required(),
-  lastName: Yup.string().required(),
+  name: Yup.string().required(),
   phone: Yup.string().required(),
+  web: Yup.string().required(),
 })
 
-type QueryType = { getServiceProfile: Service }
+type QueryType = { service: Service }
 type MutationType = { updateService: Service }
 
 const Profile = ({ navigation }: Props) => {
+  const { show } = useContext('snackbar')
 
   const { data, loading } = useQuery<QueryType>(GET_SERVICE_PROFILE)
   const [updateService] = useMutation<MutationType>(UPDATE_SERVICE)
 
   const initialValues: FormValues = useMemo(
     () => ({
-      email: data?.getServiceProfile?.email || '',
-      name: data?.getServiceProfile?.name || '',
-      phone: data?.getServiceProfile?.phone || '',
-      web: data?.getServiceProfile?.web || '',
+      email: data?.service?.email || '',
+      name: data?.service?.name || '',
+      phone: data?.service?.phone || '',
+      web: data?.service?.web || '',
     }),
     [data]
   )
 
   const onSubmit = useCallback(({ email, ...values }: FormValues) => {
     updateService({ variables: { body: values } })
-      .then((res) => console.log('Res', res))
-      .catch((err) => console.log('Error', err))
+      .then(() =>
+        show({ text: 'Profile data successfully updated.', variant: 'success' })
+      )
+      .catch(() =>
+        show({ text: 'Failed to update profile data!', variant: 'error' })
+      )
   }, [])
 
   if (loading) return <AppLoading />
 
   return (
-    <Box flex={1}>
-      <Box padding="l" marginTop="xxxl" flex={1}>
-        <Text paddingBottom="s" variant="label">Picture</Text>
-        <Image
-          source={{ uri: data?.getServiceProfile?.picture }}
-          style={{
-            width: '100%',
-            height: '75%'
-          }}
-          resizeMode="cover"
-        />
+    <ScrollView style={{ flex: 1 }}>
+      <Box padding="xl" paddingTop="xxxl">
+        <Box marginBottom="xl">
+          <Text paddingBottom="m" variant="label">
+            Picture
+          </Text>
+
+          <Image
+            source={{ uri: data?.service?.picture }}
+            style={{
+              width: '100%',
+              height: 150,
+              borderRadius: 18,
+            }}
+            resizeMode="cover"
+          />
+        </Box>
+
+        <Formik
+          {...{ initialValues, onSubmit, validationSchema }}
+          validateOnChange
+        >
+          {({ handleSubmit }) => (
+            <>
+              <Field
+                keyboardType="email-address"
+                textContentType="emailAddress"
+                editable={false}
+                type="email"
+                name="email"
+                label="Email address"
+                component={Input}
+              />
+
+              <Field type="text" name="name" label="Name" component={Input} />
+
+              <Field
+                type="text"
+                name="phone"
+                label="Phone number"
+                component={Input}
+              />
+
+              <Field type="text" name="web" label="Website" component={Input} />
+
+              <Button
+                style={{ marginTop: 16 }}
+                title="Save"
+                onPress={handleSubmit}
+              />
+            </>
+          )}
+        </Formik>
       </Box>
-      <Box padding="xl" >
-      <Formik
-        {...{ initialValues, onSubmit, validationSchema }}
-        validateOnChange
-      >
-        {({ handleSubmit }) => (
-          <>
-            <Field
-              keyboardType="email-address"
-              textContentType="emailAddress"
-              editable={false}
-              type="email"
-              name="email"
-              label="Email address"
-              component={Input}
-            />
-
-            <Field
-              type="text"
-              name="name"
-              label="Name"
-              component={Input}
-            />
-
-            <Field
-              type="text"
-              name="phone"
-              label="Phone"
-              component={Input}
-            />
-
-            <Field
-              type="text"
-              name="web"
-              label="Web"
-              component={Input}
-            />
-
-            <Button
-              style={{ marginTop: 16 }}
-              title="Save"
-              onPress={handleSubmit}
-            />
-          </>
-        )}
-      </Formik>
-      </Box>
-      </Box>
+    </ScrollView>
   )
 }
 

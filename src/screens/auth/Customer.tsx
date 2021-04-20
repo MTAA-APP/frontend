@@ -42,20 +42,22 @@ const initialValues: FormValues = {
   confirm: '',
 }
 
-// TODO: errors
-
 const Customer = ({ navigation }: Props) => {
   const [signup] = useMutation<{ customerSignup: AuthPayload }>(CUSTOMER_SIGNUP)
 
   const { login } = useContext('auth')
+  const { show } = useContext('snackbar')
 
   const onSubmit = useCallback(({ confirm, ...values }: FormValues) => {
     signup({ variables: { body: values } })
       .then(({ data, errors }) => {
         if (!data?.customerSignup || !!errors) throw Error()
         login(data?.customerSignup?.token)
+        show({ text: 'Succesfully signed up', variant: 'success' })
       })
-      .catch((err) => console.log('Error', err))
+      .catch(() =>
+        show({ text: 'Email is already registered.', variant: 'error' })
+      )
   }, [])
 
   return (

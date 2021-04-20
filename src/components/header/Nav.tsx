@@ -32,7 +32,11 @@ const Menu = () => {
   )
 
   return (
-    <Box position="relative" style={{ marginRight: 22, marginTop: 28 }}>
+    <Box
+      position="relative"
+      zIndex={100}
+      style={{ marginRight: 22, marginTop: 28 }}
+    >
       {isVisible && (
         <Box
           backgroundColor="title"
@@ -41,7 +45,7 @@ const Menu = () => {
           padding="s"
           top={-18}
           right={-12}
-          zIndex={100}
+          zIndex={200}
           elevation={30}
           borderRadius={200}
         >
@@ -122,7 +126,12 @@ const Menu = () => {
             />
           </TouchableOpacity>
 
-          <TouchableOpacity style={{ padding: 16 }} onPress={logout}>
+          <TouchableOpacity
+            style={{ padding: 16 }}
+            onPress={() => {
+              logout().then(() => navigation.navigate('SignIn'))
+            }}
+          >
             <Image
               source={LOGOUT_ICON}
               style={{ width: 18, height: 18 }}

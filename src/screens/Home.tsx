@@ -32,7 +32,7 @@ const Home = ({ navigation }: Props) => {
           <Text>Lorem ipsum dolor sit amet</Text>
         </Box>
 
-        <Button title="Sign In" onPress={() => navigation.push('SignIn')} />
+        <Button title="Enter" onPress={() => navigation.push('SignIn')} />
       </Box>
     </>
   )

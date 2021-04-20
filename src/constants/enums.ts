@@ -7,3 +7,25 @@ export const SERVICE_CATEGORY = {
   PUB: 'Pub',
   PATISSERIE: 'Pattisserie',
 }
+
+export const PAYMENT = {
+  CASH: 'Cash',
+  CARD: 'Card',
+  ONLINE: 'Online',
+}
+
+export const STATUS = {
+  WAITING: 'In the cart',
+  READY: 'Waiting for confirmation',
+  CONFIRMED: 'In progress',
+  SENT: 'On the road',
+  COMPLETED: 'Delivered and received',
+}
+
+export const ITEM_CATEGORY = {
+  DRINK: 'Drink',
+  SOUP: 'Soup',
+  PIZZA: 'Pizza',
+  MEAT: 'Meat',
+  DESSERT: 'Dessert',
+}

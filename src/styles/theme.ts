@@ -25,6 +25,8 @@ const theme = createTheme({
     label: palette.grey,
     transparent: palette.transparent,
     selected: palette.selected,
+    success: palette.green,
+    error: palette.red,
   },
 
   spacing: {
@@ -101,12 +103,6 @@ const theme = createTheme({
     input: {
       fontFamily: 'Rubik_400Regular',
       fontSize: 15,
-    },
-  },
-
-  buttonVariants: {
-    primary: {
-      backgroundColor: 'primary',
     },
   },
 })

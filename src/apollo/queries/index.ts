@@ -2,6 +2,7 @@
 export { default as GET_ME } from './getMe'
 
 // Items
+export { default as GET_ITEMS } from './getItems'
 export { default as GET_ITEM } from './getItem'
 
 // Services

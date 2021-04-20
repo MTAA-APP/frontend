@@ -1,44 +1,29 @@
 import React from 'react'
-import {
-  createRestyleComponent,
-  createVariant,
-  VariantProps,
-} from '@shopify/restyle'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { TouchableOpacity } from 'react-native'
 
+import Box from './Box'
 import Text from './Text'
 
-import { Theme } from 'styles/theme'
-
-type Variant = VariantProps<Theme, 'buttonVariants'>
-
-type Props = Variant & {
+type Props = {
   title: string
   onPress: () => void
   style?: {}
 }
 
-const variant = createVariant({
-  themeKey: 'buttonVariants',
-  defaults: {
-    width: '100%',
-    paddingVertical: 'm',
-    paddingHorizontal: 'xxl',
-    borderRadius: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-})
-
-const Wrapper = createRestyleComponent<Variant, Theme>(
-  [variant],
-  TouchableOpacity
-)
-
-const Button = ({ title, onPress, variant = 'primary', ...rest }: Props) => (
-  <Wrapper {...{ onPress, variant, ...rest }}>
-    <Text variant="button">{title}</Text>
-  </Wrapper>
+const Button = ({ title, onPress, ...rest }: Props) => (
+  <TouchableOpacity {...{ onPress, ...rest }}>
+    <Box
+      accessible
+      paddingVertical="m"
+      paddingHorizontal="xxl"
+      borderRadius={50}
+      alignItems="center"
+      justifyContent="center"
+      backgroundColor="primary"
+    >
+      <Text variant="button">{title}</Text>
+    </Box>
+  </TouchableOpacity>
 )
 
 export default Button

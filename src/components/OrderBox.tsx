@@ -4,14 +4,17 @@ import { Image } from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 import { Box, Text, ActionButton } from 'ui'
+import { Status } from 'types/enums'
+import { Children } from 'types/global'
+import { STATUS_ICON } from 'constants/icons'
 
-import PLACEHOLDER from 'assets/images/image-placeholder.png'
-import CROSS_ICON from 'assets/icons/cross.png'
+import CLOSE_ICON from 'assets/icons/close.png'
 
 type Props = {
   title?: string
-  description?: string
   leftIcon: number
+  status: Status
+  children?: Children
   handlePress: () => void
   handleLeftPress?: () => void
   handleRightPress?: () => void
@@ -19,8 +22,9 @@ type Props = {
 
 const OrderBox = ({
   title,
-  description,
   leftIcon,
+  status,
+  children,
   handlePress,
   handleLeftPress,
   handleRightPress,
@@ -51,7 +55,7 @@ const OrderBox = ({
             variant="secondary"
             side="right"
             backgroundColor="primary"
-            icon={CROSS_ICON}
+            icon={CLOSE_ICON}
             onPress={() => {
               handleRightPress()
               ref?.current?.close()
@@ -64,28 +68,32 @@ const OrderBox = ({
         <Box
           flex={1}
           flexDirection="row"
-          borderRadius={16}
+          borderRadius={30}
           minHeight={85}
           padding="m"
           backgroundColor="white"
           marginHorizontal="xl"
           marginVertical="s"
-          elevation={5}
+          elevation={1}
         >
-          <Image
-            source={PLACEHOLDER}
-            style={{
-              width: 53,
-              height: 53,
-              borderRadius: 100,
-              marginRight: 16,
-            }}
-            resizeMode="cover"
-          />
+          <Box
+            width={53}
+            height={53}
+            borderRadius={100}
+            marginRight="m"
+            padding="m"
+            backgroundColor="label"
+          >
+            <Image
+              source={STATUS_ICON[status]}
+              style={{ flex: 1, width: '100%' }}
+              resizeMode="contain"
+            />
+          </Box>
 
           <Box flexDirection="column">
             <Text variant="order">{title}</Text>
-            <Text variant="label">{description}</Text>
+            {children}
           </Box>
         </Box>
       </TouchableWithoutFeedback>

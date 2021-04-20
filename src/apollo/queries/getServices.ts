@@ -6,7 +6,7 @@ export default gql`
     $search: String
     $category: ServiceCategory
   ) {
-    getServices(favorites: $favorites, search: $search, category: $category)
+    services(favorites: $favorites, search: $search, category: $category)
       @rest(type: "[Service]", path: "/services?{args}") {
       id
       name

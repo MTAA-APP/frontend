@@ -8,6 +8,7 @@ import Router from './src/Router'
 import LoadAssets from './src/components/LoadAssets'
 
 import { AuthProvider } from './src/contexts/AuthContext'
+import { SnackbarProvider } from './src/contexts/SnackbarContext'
 
 import theme from './src/styles/theme'
 
@@ -18,7 +19,9 @@ const App = () => (
     <ThemeProvider {...{ theme }}>
       <LoadAssets>
         <AuthProvider>
-          <Router />
+          <SnackbarProvider>
+            <Router />
+          </SnackbarProvider>
         </AuthProvider>
       </LoadAssets>
     </ThemeProvider>

@@ -8,3 +8,6 @@ export { default as Back } from './header/Back'
 // List items
 export { default as Item } from './Item'
 export { default as OrderBox } from './OrderBox'
+
+// Modal
+export { default as ItemModal } from './ItemModal'

@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 export default gql`
   query getCustomerProfile {
-    profile @rest(type: "Customer", path: "/profile/customer") {
+    customer @rest(type: "Customer", path: "/profile/customer") {
       email
       firstName
       lastName

@@ -11,6 +11,7 @@ import { Customer } from 'types/datamodels'
 
 import { GET_CUSTOMER_PROFILE } from 'apollo/queries'
 import { UPDATE_CUSTOMER } from 'apollo/mutations'
+import { useContext } from 'hooks'
 
 type Props = StackScreenProps<RootStackParamList, 'CustomerProfile'>
 
@@ -25,36 +26,42 @@ const validationSchema = Yup.object().shape({
   email: Yup.string().email().required(),
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
-  phone: Yup.string().required(),
+  phone: Yup.string(),
 })
 
-type QueryType = { profile: Customer }
+type QueryType = { customer: Customer }
 type MutationType = { updateCustomer: Customer }
 
 const Profile = ({ navigation }: Props) => {
+  const { show } = useContext('snackbar')
+
   const { data, loading } = useQuery<QueryType>(GET_CUSTOMER_PROFILE)
   const [updateCustomer] = useMutation<MutationType>(UPDATE_CUSTOMER)
 
   const initialValues: FormValues = useMemo(
     () => ({
-      email: data?.profile?.email || '',
-      firstName: data?.profile?.firstName || '',
-      lastName: data?.profile?.lastName || '',
-      phone: data?.profile?.phone || '',
+      email: data?.customer?.email || '',
+      firstName: data?.customer?.firstName || '',
+      lastName: data?.customer?.lastName || '',
+      phone: data?.customer?.phone || '',
     }),
     [data]
   )
 
   const onSubmit = useCallback(({ email, ...values }: FormValues) => {
     updateCustomer({ variables: { body: values } })
-      .then((res) => console.log('Res', res))
-      .catch((err) => console.log('Error', err))
+      .then(() =>
+        show({ text: 'Profile data successfully updated.', variant: 'success' })
+      )
+      .catch(() =>
+        show({ text: 'Failed to update profile data!', variant: 'error' })
+      )
   }, [])
 
   if (loading) return <AppLoading />
 
   return (
-    <Box padding="xl" marginTop="xxxl">
+    <Box padding="xl" paddingTop="xxxl">
       <Formik
         {...{ initialValues, onSubmit, validationSchema }}
         validateOnChange
@@ -85,7 +92,12 @@ const Profile = ({ navigation }: Props) => {
               component={Input}
             />
 
-            <Field type="text" name="phone" label="Phone" component={Input} />
+            <Field
+              type="text"
+              name="phone"
+              label="Phone number"
+              component={Input}
+            />
 
             <Button
               style={{ marginTop: 16 }}

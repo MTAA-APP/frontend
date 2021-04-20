@@ -11,13 +11,13 @@ import { Theme } from 'styles/theme'
 
 type Props = FieldProps & {
   label: string
+  variant: 'primary' | 'secondary'
   items: SelectItem[]
 }
 
-// TODO: style
-
 const Select = ({
   label,
+  variant = 'primary',
   items,
   field: { name, value, onChange },
   form: { errors },
@@ -43,6 +43,8 @@ const Select = ({
           onValueChange={onChange(name)}
           style={{
             height: 40,
+            color:
+              theme.colors[variant === 'secondary' ? 'background' : 'title'],
           }}
         >
           {items?.map((item: SelectItem) => (
