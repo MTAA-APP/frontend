@@ -1,17 +1,22 @@
-import React from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
-import { Image } from 'react-native'
+import { FlatList, Image } from 'react-native'
 import { useQuery } from '@apollo/client'
 import AppLoading from 'expo-app-loading'
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import { RootStackParamList } from 'types/stack'
 import { Box, Text, Button } from 'ui'
 import { Service } from 'types/datamodels'
+import { makeCall, openUrl } from 'utils/functions'
+import { DAY } from 'constants/enums'
 
 import { GET_SERVICE } from 'apollo/queries'
 
 import PHONE_ICON from 'assets/icons/phone.png'
+import { SERVICE_CATEGORY } from 'constants/enums'
+import { BottomCart, TextBlock } from 'components'
+import { getTime } from 'utils/date'
 
 type Props = StackScreenProps<RootStackParamList, 'Service'>
 
@@ -22,7 +27,23 @@ const ServiceDetail = ({ navigation, route: { params } }: Props) => {
     variables: { id: params?.id },
   })
 
-  if (loading) return <AppLoading />
+  const handleCall = useCallback(() => makeCall(data?.service?.phone), [data])
+  const handleWeb = useCallback(() => openUrl(data?.service?.web), [data])
+
+  const openingHours = useMemo(
+    () =>
+      data?.service?.openingHours?.map((item) => ({
+        title: DAY[item?.day],
+        text: `${getTime(item?.from)} - ${getTime(item?.to)}`,
+      })),
+    [data]
+  )
+
+  useEffect(() => {
+    if (!loading && (!data || !!error)) navigation.navigate('Services')
+  }, [loading])
+
+  if (loading || !data) return <AppLoading />
 
   return (
     <>
@@ -45,40 +66,85 @@ const ServiceDetail = ({ navigation, route: { params } }: Props) => {
       >
         <Button
           title="Show menu"
+          style={{ flex: 1 }}
           onPress={() => navigation.navigate('Menu', { id: params?.id })}
         />
 
-        <TouchableOpacity style={{ marginLeft: 16 }}>
-          <Box
-            accessible
-            backgroundColor="secondary"
-            padding="m"
-            borderRadius={50}
-          >
-            <Image
-              source={PHONE_ICON}
-              style={{ width: 21, height: 21 }}
-              resizeMode="contain"
-            />
-          </Box>
-        </TouchableOpacity>
+        {data?.service?.phone && (
+          <TouchableOpacity style={{ marginLeft: 16 }} onPress={handleCall}>
+            <Box
+              accessible
+              backgroundColor="secondary"
+              padding="ml"
+              borderRadius={50}
+            >
+              <Image
+                source={PHONE_ICON}
+                style={{ width: 20, height: 20 }}
+                resizeMode="contain"
+              />
+            </Box>
+          </TouchableOpacity>
+        )}
       </Box>
 
-      <Box flex={2} padding="xl">
-        <Text variant="title">{data?.service?.name}</Text>
-        <Text marginBottom="xl">{data?.service?.description}</Text>
+      <Box flex={2}>
+        <Box padding="xl">
+          <Text variant="title">{data?.service?.name}</Text>
+          <Text marginBottom="xs">{data?.service?.description}</Text>
+          <Text variant="label">
+            Category: {SERVICE_CATEGORY[data?.service?.category]}
+          </Text>
+        </Box>
 
-        <Text variant="subtitle" marginBottom="m">
-          Opening Hours
-        </Text>
+        <FlatList
+          data={[1]}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(_, idx) => `${idx}`}
+          renderItem={() => (
+            <>
+              <Box paddingHorizontal="xl">
+                <TextBlock
+                  title="Contact"
+                  data={[
+                    { title: 'Email', text: data?.service?.email },
+                    {
+                      title: 'Website',
+                      text: data?.service?.web,
+                      onPress: handleWeb,
+                    },
+                    { title: 'Phone', text: data?.service?.phone },
+                  ]}
+                />
 
-        <Box
-          borderRadius={16}
-          padding="m"
-          backgroundColor="white"
-          elevation={1}
-        ></Box>
+                {!!data?.service?.address && (
+                  <TextBlock
+                    title="Address"
+                    data={[
+                      {
+                        title: 'Country',
+                        text: data?.service?.address?.country,
+                      },
+                      { title: 'City', text: data?.service?.address?.city },
+                      {
+                        title: 'Postal code',
+                        text: data?.service?.address?.postalCode,
+                      },
+                      { title: 'Street', text: data?.service?.address?.street },
+                    ]}
+                  />
+                )}
+
+                {!!openingHours?.length && (
+                  <TextBlock title="Opening Hours" data={openingHours} />
+                )}
+              </Box>
+            </>
+          )}
+        />
       </Box>
+
+      <BottomCart />
     </>
   )
 }

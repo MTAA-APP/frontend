@@ -9,4 +9,4 @@ const Title = ({ children: title }: StackHeaderTitleProps) => (
   </Text>
 )
 
-export default Title
+export default React.memo(Title)

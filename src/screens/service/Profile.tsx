@@ -34,6 +34,8 @@ const validationSchema = Yup.object().shape({
 type QueryType = { service: Service }
 type MutationType = { updateService: Service }
 
+// TODO: picture, address
+
 const Profile = ({ navigation }: Props) => {
   const { show } = useContext('snackbar')
 
@@ -63,61 +65,59 @@ const Profile = ({ navigation }: Props) => {
   if (loading) return <AppLoading />
 
   return (
-    <ScrollView style={{ flex: 1 }}>
-      <Box padding="xl" paddingTop="xxxl">
-        <Box marginBottom="xl">
-          <Text paddingBottom="m" variant="label">
-            Picture
-          </Text>
+    <Box flex={1} padding="xl" paddingTop="xxxl">
+      <Box marginBottom="xl">
+        <Text paddingBottom="m" variant="label">
+          Picture
+        </Text>
 
-          <Image
-            source={{ uri: data?.service?.picture }}
-            style={{
-              width: '100%',
-              height: 150,
-              borderRadius: 18,
-            }}
-            resizeMode="cover"
-          />
-        </Box>
-
-        <Formik
-          {...{ initialValues, onSubmit, validationSchema }}
-          validateOnChange
-        >
-          {({ handleSubmit }) => (
-            <>
-              <Field
-                keyboardType="email-address"
-                textContentType="emailAddress"
-                editable={false}
-                type="email"
-                name="email"
-                label="Email address"
-                component={Input}
-              />
-
-              <Field type="text" name="name" label="Name" component={Input} />
-
-              <Field
-                type="text"
-                name="phone"
-                label="Phone number"
-                component={Input}
-              />
-
-              <Field type="text" name="web" label="Website" component={Input} />
-
-              <Button
-                style={{ marginTop: 16 }}
-                title="Save"
-                onPress={handleSubmit}
-              />
-            </>
-          )}
-        </Formik>
+        <Image
+          source={{ uri: data?.service?.picture }}
+          style={{
+            width: '100%',
+            height: 150,
+            borderRadius: 18,
+          }}
+          resizeMode="cover"
+        />
       </Box>
-    </ScrollView>
+
+      <Formik
+        {...{ initialValues, onSubmit, validationSchema }}
+        validateOnChange
+      >
+        {({ handleSubmit }) => (
+          <>
+            <Field
+              keyboardType="email-address"
+              textContentType="emailAddress"
+              editable={false}
+              type="email"
+              name="email"
+              label="Email address"
+              component={Input}
+            />
+
+            <Field type="text" name="name" label="Name" component={Input} />
+
+            <Field
+              type="text"
+              name="phone"
+              label="Phone number"
+              component={Input}
+            />
+
+            <Field type="text" name="web" label="Website" component={Input} />
+
+            <Button
+              style={{ marginTop: 16 }}
+              title="Save"
+              onPress={handleSubmit}
+            />
+          </>
+        )}
+      </Formik>
+    </Box>
   )
 }
 

@@ -19,5 +19,3 @@ export type RootStackParamList = {
   MyMenu: undefined
   ServiceProfile: undefined
 }
-
-// TODO: add item

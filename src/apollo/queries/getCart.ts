@@ -2,12 +2,12 @@ import { gql } from '@apollo/client'
 
 export default gql`
   query getCart {
-    getCart @rest(type: "Order", path: "/cart") {
+    cart @rest(type: "Order", path: "/cart") {
       id
       payment
       status
       createdAt
-      complatedAt
+      completedAt
       items @type(name: "[OrderItem]") {
         id
         amount

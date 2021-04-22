@@ -11,6 +11,7 @@ export { default as DELETE_ITEM } from './deleteItem'
 export { default as CREATE_ORDER_ITEM } from './createOrderItem'
 export { default as DELETE_ORDER_ITEM } from './deleteOrderItem'
 export { default as UPDATE_ORDER_PAY } from './updateOrderPay'
+export { default as DELETE_CART } from './deleteCart'
 
 // Services
 export { default as DELETE_SERVICE } from './deleteService'

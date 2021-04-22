@@ -35,4 +35,4 @@ const NoData = ({ text, loading = true }: Props) =>
     </Box>
   )
 
-export default NoData
+export default React.memo(NoData)

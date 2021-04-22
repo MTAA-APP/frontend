@@ -7,7 +7,8 @@ import { useMutation, useQuery } from '@apollo/client'
 import { RootStackParamList } from 'types/stack'
 import { Box, NoData, RowSelect, Search, Text } from 'ui'
 import { Item } from 'components'
-import { useContext } from 'hooks'
+import { useContext, useToggle } from 'hooks'
+import { keyIdExtractor } from 'utils/functions'
 import { Service } from 'types/datamodels'
 import { ServiceCategory } from 'types/enums'
 import { SERVICE_CATEGORY } from 'constants/enums'
@@ -21,15 +22,17 @@ type Props = StackScreenProps<RootStackParamList, 'Home'>
 
 type QueryType = { services: Service[] }
 
-// TODO: shadows
+const isFavorite = (item: Service): boolean => !!item?.customers?.length
 
 const Services = ({ navigation }: Props) => {
   const { show } = useContext('snackbar')
 
-  const [favorites, setFavorites] = useState<boolean>(false)
-  const [search, setSearch] = useState<string>(undefined!)
-  const [category, setCategory] = useState<ServiceCategory>(undefined!)
+  const { isVisible: favorites, toggle: toggleFavorites } = useToggle()
+  const [search, setSearch] = useState<string>()
+  const [category, setCategory] = useState<ServiceCategory | undefined>()
 
+  const [removeFavorite] = useMutation(DELETE_SERVICE)
+  const [addFavorite] = useMutation(UPDATE_FAVORITE)
   const { data, loading, refetch } = useQuery<QueryType>(GET_SERVICES, {
     variables: {
       ...(!!favorites && { favorites }),
@@ -37,9 +40,6 @@ const Services = ({ navigation }: Props) => {
       ...(!!category && { category }),
     },
   })
-
-  const [removeFavorite] = useMutation(DELETE_SERVICE)
-  const [addFavorite] = useMutation(UPDATE_FAVORITE)
 
   const handleRemove = useCallback(
     (id: string) => {
@@ -62,8 +62,8 @@ const Services = ({ navigation }: Props) => {
     (id: string) => {
       addFavorite({ variables: { body: { id } } })
         .then(() => {
-          refetch()
           show({ text: 'Service added to favorites', variant: 'success' })
+          refetch()
         })
         .catch(() =>
           show({
@@ -84,8 +84,6 @@ const Services = ({ navigation }: Props) => {
     refetch()
   }, [favorites, category])
 
-  const keyExtractor = useCallback((item) => item?.id, [])
-
   return (
     <>
       <Box padding="xl" paddingTop="xxxl">
@@ -97,22 +95,20 @@ const Services = ({ navigation }: Props) => {
         >
           <Text variant="title">Services</Text>
 
-          <TouchableOpacity onPress={() => setFavorites(!favorites)}>
+          <TouchableOpacity onPress={toggleFavorites}>
             <Box
               accessible
               width={30}
               height={30}
               backgroundColor={favorites ? 'primary' : 'label'}
               borderRadius={8}
+              padding="s"
               alignItems="center"
               justifyContent="center"
             >
               <Image
                 source={WHITE_STAR_ICON}
-                style={{
-                  height: 12,
-                  width: 12,
-                }}
+                style={{ height: '100%', width: '100%' }}
                 resizeMode="contain"
               />
             </Box>
@@ -123,16 +119,14 @@ const Services = ({ navigation }: Props) => {
 
         <RowSelect
           selected={category}
-          handleSelect={(category?: ServiceCategory) =>
-            setCategory(category || undefined!)
-          }
+          handleSelect={setCategory}
           items={Object.values(ServiceCategory)}
         />
       </Box>
 
       <FlatList
         data={data?.services}
-        keyExtractor={keyExtractor}
+        keyExtractor={keyIdExtractor}
         contentContainerStyle={{ paddingBottom: 30 }}
         refreshing={loading}
         refreshControl={
@@ -148,14 +142,32 @@ const Services = ({ navigation }: Props) => {
             picture={item?.picture}
             leftIcon={WHITE_STAR_ICON}
             handlePress={() => navigation.navigate('Service', { id: item?.id })}
-            {...(item?.customers?.length
-              ? {
-                  handleRightPress: () => handleRemove(item?.id),
-                }
-              : {
-                  handleLeftPress: () => handleAdd(item?.id),
-                })}
-          />
+            handleLeftPress={
+              isFavorite(item) ? undefined : () => handleAdd(item?.id)
+            }
+            handleRightPress={
+              isFavorite(item) ? () => handleRemove(item?.id) : undefined
+            }
+          >
+            {isFavorite(item) && (
+              <Box
+                style={{ marginLeft: -24, marginBottom: -24 }}
+                width={60}
+                height={40}
+                backgroundColor="primary"
+                paddingVertical="s"
+                paddingHorizontal="l"
+                borderBottomLeftRadius={30}
+                borderTopRightRadius={30}
+              >
+                <Image
+                  source={WHITE_STAR_ICON}
+                  style={{ width: '100%', height: '100%' }}
+                  resizeMode="contain"
+                />
+              </Box>
+            )}
+          </Item>
         )}
       />
     </>

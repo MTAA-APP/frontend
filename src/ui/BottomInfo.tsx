@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 
@@ -15,11 +15,13 @@ type Props = {
 const BottomInfo = ({ text, buttonText, route }: Props) => {
   const navigation = useNavigation()
 
+  const handlePress = useCallback(() => navigation.navigate(route), [route])
+
   return (
     <Box flexDirection="row" justifyContent="center">
       <Text variant="label">{text} </Text>
 
-      <TouchableOpacity onPress={() => navigation.navigate(route)}>
+      <TouchableOpacity onPress={handlePress}>
         <Text variant="label" color="selected">
           {buttonText}
         </Text>
@@ -28,4 +30,4 @@ const BottomInfo = ({ text, buttonText, route }: Props) => {
   )
 }
 
-export default BottomInfo
+export default React.memo(BottomInfo)

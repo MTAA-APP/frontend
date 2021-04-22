@@ -11,7 +11,7 @@ import SEARCH_ICON from 'assets/icons/search.png'
 import CROSS_ICON from 'assets/icons/cross.png'
 
 type Props = {
-  value: string
+  value?: string
   onChangeText: (value: string) => void
 }
 

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Image } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import { RootStackParamList } from 'types/stack'
 import { Box } from 'ui'
@@ -17,14 +17,14 @@ import PROFILE_ICON from 'assets/icons/person.png'
 import ORDERS_ICON from 'assets/icons/orders.png'
 import ITEMS_ICON from 'assets/icons/items.png'
 
-const Menu = () => {
+const Nav = () => {
   const navigation = useNavigation()
 
   const { user, logout } = useContext('auth')
   const { isVisible, show, hide } = useToggle()
 
   const navigate = useCallback(
-    (route: keyof RootStackParamList) => {
+    (route: keyof RootStackParamList) => () => {
       navigation.navigate(route)
       hide()
     },
@@ -32,11 +32,7 @@ const Menu = () => {
   )
 
   return (
-    <Box
-      position="relative"
-      zIndex={100}
-      style={{ marginRight: 22, marginTop: 28 }}
-    >
+    <Box position="relative" style={{ marginRight: 22, marginTop: 28 }}>
       {isVisible && (
         <Box
           backgroundColor="title"
@@ -45,9 +41,9 @@ const Menu = () => {
           padding="s"
           top={-18}
           right={-12}
-          zIndex={200}
           elevation={30}
           borderRadius={200}
+          zIndex={1000}
         >
           <TouchableOpacity style={{ padding: 16 }} onPress={hide}>
             <Image
@@ -59,9 +55,9 @@ const Menu = () => {
 
           <TouchableOpacity
             style={{ padding: 16 }}
-            onPress={() =>
-              navigate(user?.role === Role.SERVICE ? 'Orders' : 'Services')
-            }
+            onPress={navigate(
+              user?.role === Role.SERVICE ? 'Orders' : 'Services'
+            )}
           >
             <Image
               source={HOME_ICON}
@@ -73,7 +69,7 @@ const Menu = () => {
           {user?.role === Role.CUSTOMER && (
             <TouchableOpacity
               style={{ padding: 16 }}
-              onPress={() => navigate('Cart')}
+              onPress={navigate('Cart')}
             >
               <Image
                 source={CART_ICON}
@@ -86,7 +82,7 @@ const Menu = () => {
           {user?.role === Role.CUSTOMER && (
             <TouchableOpacity
               style={{ padding: 16 }}
-              onPress={() => navigate('MyOrders')}
+              onPress={navigate('MyOrders')}
             >
               <Image
                 source={ORDERS_ICON}
@@ -99,7 +95,7 @@ const Menu = () => {
           {user?.role === Role.SERVICE && (
             <TouchableOpacity
               style={{ padding: 16 }}
-              onPress={() => navigate('MyMenu')}
+              onPress={navigate('MyMenu')}
             >
               <Image
                 source={ITEMS_ICON}
@@ -111,13 +107,9 @@ const Menu = () => {
 
           <TouchableOpacity
             style={{ padding: 16 }}
-            onPress={() =>
-              navigate(
-                user?.role === Role.SERVICE
-                  ? 'ServiceProfile'
-                  : 'CustomerProfile'
-              )
-            }
+            onPress={navigate(
+              user?.role === Role.SERVICE ? 'ServiceProfile' : 'CustomerProfile'
+            )}
           >
             <Image
               source={PROFILE_ICON}
@@ -126,12 +118,7 @@ const Menu = () => {
             />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={{ padding: 16 }}
-            onPress={() => {
-              logout().then(() => navigation.navigate('SignIn'))
-            }}
-          >
+          <TouchableOpacity style={{ padding: 16 }} onPress={logout}>
             <Image
               source={LOGOUT_ICON}
               style={{ width: 18, height: 18 }}
@@ -148,4 +135,4 @@ const Menu = () => {
   )
 }
 
-export default Menu
+export default React.memo(Nav)

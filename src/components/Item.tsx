@@ -1,11 +1,11 @@
 import React, { useRef } from 'react'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
-import { Image } from 'react-native'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { Image, TouchableWithoutFeedback } from 'react-native'
 
 import { Box, Text, ActionButton } from 'ui'
 import { Children } from 'types/global'
 
+import PLACEHOLDER from 'assets/images/image-placeholder.png'
 import DELETE_ICON from 'assets/icons/delete.png'
 import STAR_ICON from 'assets/icons/star.png'
 
@@ -70,25 +70,26 @@ const Item = ({
           flex={1}
           flexDirection="row"
           alignItems="center"
+          minHeight={128}
           borderRadius={30}
-          height={130}
           backgroundColor="white"
           marginHorizontal="xl"
           marginVertical="s"
-          elevation={1}
+          elevation={4}
+          position="relative"
         >
           <Box flex={1} height="100%" padding="l" flexDirection="column">
             <Text variant="item" marginBottom="xs">
               {title}
             </Text>
 
-            {!!description && <Text>{description}</Text>}
+            {!!description && <Text marginBottom="m">{description}</Text>}
 
             {children}
           </Box>
 
           <Image
-            source={{ uri: picture }}
+            source={picture ? { uri: picture } : PLACEHOLDER}
             style={{
               width: 130,
               height: variant === 'secondary' ? '80%' : '100%',
@@ -103,4 +104,4 @@ const Item = ({
   )
 }
 
-export default React.memo(Item)
+export default Item

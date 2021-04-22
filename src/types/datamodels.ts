@@ -1,5 +1,3 @@
-import { DateTime } from 'luxon'
-
 import {
   ServiceCategory,
   ItemCategory,
@@ -8,6 +6,11 @@ import {
   Role,
   Day,
 } from 'types/enums'
+
+export type OrderInfo = {
+  count: number
+  price: number
+}
 
 export type User = {
   id: string
@@ -86,6 +89,7 @@ export type Order = {
   status: Status
   completedAt?: string
   createdAt: string
+  total: number // added
 }
 
 export type OrderItem = {
@@ -93,6 +97,7 @@ export type OrderItem = {
   amount: number
   item: Item
   order: Order
+  total: number // added
 }
 
 export type Rating = {
@@ -104,7 +109,7 @@ export type Rating = {
 export type OpeningHour = {
   id: string
   day: Day
-  from: DateTime
-  to: DateTime
+  from: string
+  to: string
   service?: Service
 }

@@ -49,4 +49,4 @@ const RowSelect = ({ items, selected, handleSelect }: Props) => {
   )
 }
 
-export default RowSelect
+export default React.memo(RowSelect)

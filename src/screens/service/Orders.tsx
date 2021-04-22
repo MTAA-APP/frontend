@@ -7,6 +7,8 @@ import { RootStackParamList } from 'types/stack'
 import { Box, NoData, Text } from 'ui'
 import { OrderBox } from 'components'
 import { useContext } from 'hooks'
+import { keyIdExtractor } from 'utils/functions'
+import { formatDate } from 'utils/date'
 import { Order } from 'types/datamodels'
 import { Status } from 'types/enums'
 import { STATUS, PAYMENT } from 'constants/enums'
@@ -15,7 +17,6 @@ import { NEXT_STATUS } from 'constants/global'
 
 import { GET_ORDERS } from 'apollo/queries'
 import { UPDATE_ORDER_STATUS } from 'apollo/mutations'
-import { formatDate } from 'utils/date'
 
 type Props = StackScreenProps<RootStackParamList, 'Orders'>
 
@@ -54,7 +55,7 @@ const Orders = ({ navigation }: Props) => {
       <Box paddingTop="xxxl" flex={1}>
         <FlatList
           data={data?.orders}
-          keyExtractor={(item) => item?.id}
+          keyExtractor={keyIdExtractor}
           contentContainerStyle={{ paddingBottom: 30 }}
           refreshing={loading}
           refreshControl={
@@ -69,29 +70,30 @@ const Orders = ({ navigation }: Props) => {
               status={item?.status}
               leftIcon={NEXT_STATUS_ICON[item?.status]}
               handlePress={() => navigation.navigate('Order', { id: item?.id })}
-              {...(item?.status !== Status.COMPLETED && {
-                handleLeftPress: () =>
-                  handleStatusChange(item?.id, item?.status),
-              })}
-              {...(item?.status === Status.READY && {
-                handleRightPress: () => console.log('TODO'),
-              })}
+              handleLeftPress={
+                item?.status !== Status.COMPLETED
+                  ? () => handleStatusChange(item?.id, item?.status)
+                  : undefined
+              }
+              handleRightPress={
+                item?.status === Status.READY
+                  ? () => console.log('TODO') // TODO: add status
+                  : undefined
+              }
             >
               <Text variant="label">
                 {`${STATUS[item?.status]} - ${PAYMENT[item?.payment]}`}
               </Text>
 
-              <Text variant="label">Created {formatDate(item?.createdAt)}</Text>
+              <Text variant="label">
+                Created at {formatDate(item?.createdAt)}
+              </Text>
             </OrderBox>
           )}
         />
       </Box>
 
       <Box
-        position="absolute"
-        bottom={0}
-        left={0}
-        right={0}
         backgroundColor="title"
         padding="xl"
         borderTopLeftRadius={18}

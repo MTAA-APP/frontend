@@ -10,6 +10,7 @@ import { useModal } from 'hooks'
 import { Item as ItemType } from 'types/datamodels'
 
 import { GET_ITEMS } from 'apollo/queries'
+import { ITEM_CATEGORY } from 'constants/enums'
 
 type Props = StackScreenProps<RootStackParamList, 'MyMenu'>
 
@@ -53,7 +54,7 @@ const Menu = ({ navigation }: Props) => {
           <Item
             title={item?.name}
             variant="secondary"
-            description="CATEGORY"
+            description={ITEM_CATEGORY[item?.categories?.[0]]}
             picture={item?.picture}
             handlePress={() => show(item)}
           />

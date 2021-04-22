@@ -6,12 +6,13 @@ import { Field, Formik } from 'formik'
 import AppLoading from 'expo-app-loading'
 
 import { RootStackParamList } from 'types/stack'
-import { Box, Button, Input } from 'ui'
+import { Box, Button, Input, PaymentSelect } from 'ui'
+import { useContext } from 'hooks'
 import { Customer } from 'types/datamodels'
+import { Payment } from 'types/enums'
 
 import { GET_CUSTOMER_PROFILE } from 'apollo/queries'
 import { UPDATE_CUSTOMER } from 'apollo/mutations'
-import { useContext } from 'hooks'
 
 type Props = StackScreenProps<RootStackParamList, 'CustomerProfile'>
 
@@ -20,6 +21,7 @@ type FormValues = {
   firstName: string
   lastName: string
   phone: string
+  payment: Payment
 }
 
 const validationSchema = Yup.object().shape({
@@ -44,6 +46,7 @@ const Profile = ({ navigation }: Props) => {
       firstName: data?.customer?.firstName || '',
       lastName: data?.customer?.lastName || '',
       phone: data?.customer?.phone || '',
+      payment: data?.customer?.payment || Payment.CASH,
     }),
     [data]
   )
@@ -61,50 +64,54 @@ const Profile = ({ navigation }: Props) => {
   if (loading) return <AppLoading />
 
   return (
-    <Box padding="xl" paddingTop="xxxl">
+    <Box flex={1} padding="xl" paddingTop="xxxl">
       <Formik
         {...{ initialValues, onSubmit, validationSchema }}
         validateOnChange
       >
         {({ handleSubmit }) => (
-          <>
-            <Field
-              keyboardType="email-address"
-              textContentType="emailAddress"
-              editable={false}
-              type="email"
-              name="email"
-              label="Email address"
-              component={Input}
-            />
+          <Box flex={1} justifyContent="space-between">
+            <Box>
+              <Field
+                keyboardType="email-address"
+                textContentType="emailAddress"
+                editable={false}
+                type="email"
+                name="email"
+                label="Email address"
+                component={Input}
+              />
 
-            <Field
-              type="text"
-              name="firstName"
-              label="First name"
-              component={Input}
-            />
+              <Field
+                type="text"
+                name="firstName"
+                label="First name"
+                component={Input}
+              />
 
-            <Field
-              type="text"
-              name="lastName"
-              label="Last name"
-              component={Input}
-            />
+              <Field
+                type="text"
+                name="lastName"
+                label="Last name"
+                component={Input}
+              />
 
-            <Field
-              type="text"
-              name="phone"
-              label="Phone number"
-              component={Input}
-            />
+              <Field
+                type="text"
+                name="phone"
+                label="Phone number"
+                component={Input}
+              />
+
+              <Field type="text" name="payment" component={PaymentSelect} />
+            </Box>
 
             <Button
               style={{ marginTop: 16 }}
               title="Save"
               onPress={handleSubmit}
             />
-          </>
+          </Box>
         )}
       </Formik>
     </Box>

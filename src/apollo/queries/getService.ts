@@ -6,6 +6,7 @@ export default gql`
       id
       email
       name
+      description
       picture
       phone
       web

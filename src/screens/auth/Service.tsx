@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { Formik, Field } from 'formik'
 import * as Yup from 'yup'
-import { Image } from 'react-native'
+import { Image, KeyboardAvoidingView } from 'react-native'
 import { useMutation } from '@apollo/client'
 
 import { RootStackParamList } from 'types/stack'
@@ -16,6 +16,7 @@ import { SelectItem } from 'types/global'
 import { SERVICE_SIGNUP } from 'apollo/mutations'
 
 import PLACEHOLDER from 'assets/images/image-placeholder.png'
+import { ScrollView } from 'react-native-gesture-handler'
 
 type Props = StackScreenProps<RootStackParamList, 'ServiceSignUp'>
 

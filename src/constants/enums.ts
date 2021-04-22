@@ -29,3 +29,13 @@ export const ITEM_CATEGORY = {
   MEAT: 'Meat',
   DESSERT: 'Dessert',
 }
+
+export const DAY = {
+  MONDAY: 'Monday',
+  TUESDAY: 'Tuesday',
+  WEDNESDAY: 'Wednesday',
+  THURSDAY: 'Thursday',
+  FRIDAY: 'Friday',
+  SATURDAY: 'Saturday',
+  SUNDAY: 'Sunday',
+}

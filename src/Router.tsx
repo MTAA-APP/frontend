@@ -128,7 +128,7 @@ const Router = () => {
               <Stack.Screen
                 name="MyOrders"
                 component={MyOrders}
-                options={{ headerTitle: () => false }}
+                options={{ headerLeft: () => false, title: 'My Orders' }}
               />
 
               <Stack.Screen
