@@ -100,7 +100,7 @@ const Menu = ({ navigation, route: { params } }: Props) => {
                       marginLeft="m"
                       fontFamily="Rubik_500Medium"
                     >
-                      {item?.price} €
+                      {item?.price?.toFixed(2)} €
                     </Text>
                   </Box>
                 </TouchableOpacity>

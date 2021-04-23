@@ -2,10 +2,9 @@ import React, { useCallback, useMemo } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import * as Yup from 'yup'
 import { useMutation, useQuery } from '@apollo/client'
-import { Image } from 'react-native'
+import { FlatList, Image } from 'react-native'
 import { Field, Formik } from 'formik'
 import AppLoading from 'expo-app-loading'
-import { ScrollView } from 'react-native-gesture-handler'
 
 import { RootStackParamList } from 'types/stack'
 import { Box, Button, Input, Text } from 'ui'
@@ -14,6 +13,7 @@ import { Service } from 'types/datamodels'
 
 import { GET_SERVICE_PROFILE } from 'apollo/queries'
 import { UPDATE_SERVICE } from 'apollo/mutations'
+import { TextBlock } from 'components'
 
 type Props = StackScreenProps<RootStackParamList, 'ServiceProfile'>
 
@@ -65,55 +65,104 @@ const Profile = ({ navigation }: Props) => {
   if (loading) return <AppLoading />
 
   return (
-    <Box flex={1} padding="xl" paddingTop="xxxl">
-      <Box marginBottom="xl">
-        <Text paddingBottom="m" variant="label">
-          Picture
-        </Text>
-
-        <Image
-          source={{ uri: data?.service?.picture }}
-          style={{
-            width: '100%',
-            height: 150,
-            borderRadius: 18,
-          }}
-          resizeMode="cover"
-        />
-      </Box>
-
+    <Box flex={1} paddingTop="xxxl">
       <Formik
         {...{ initialValues, onSubmit, validationSchema }}
         validateOnChange
       >
         {({ handleSubmit }) => (
           <>
-            <Field
-              keyboardType="email-address"
-              textContentType="emailAddress"
-              editable={false}
-              type="email"
-              name="email"
-              label="Email address"
-              component={Input}
+            <FlatList
+              data={[1]}
+              contentContainerStyle={{ paddingHorizontal: 30 }}
+              keyExtractor={() => 'customerProfile'}
+              renderItem={() => (
+                <>
+                  <Box marginBottom="xl">
+                    <Text paddingBottom="m" variant="label">
+                      Picture
+                    </Text>
+
+                    <Image
+                      source={{ uri: data?.service?.picture }}
+                      style={{
+                        width: '100%',
+                        height: 150,
+                        borderRadius: 18,
+                      }}
+                      resizeMode="cover"
+                    />
+                  </Box>
+
+                  <Field
+                    keyboardType="email-address"
+                    textContentType="emailAddress"
+                    editable={false}
+                    type="email"
+                    name="email"
+                    label="Email address"
+                    component={Input}
+                  />
+
+                  <Field
+                    type="text"
+                    name="name"
+                    label="Name"
+                    component={Input}
+                  />
+
+                  <Field
+                    type="text"
+                    name="phone"
+                    label="Phone number"
+                    component={Input}
+                  />
+
+                  <Field
+                    type="text"
+                    name="web"
+                    label="Website"
+                    component={Input}
+                  />
+
+                  <TextBlock
+                    title="Address"
+                    style={{ marginTop: 16 }}
+                    onPress={() => console.log('TODO')}
+                    data={
+                      !!data?.service?.address
+                        ? [
+                            {
+                              title: 'Country',
+                              text: data?.service?.address?.country,
+                            },
+                            {
+                              title: 'City',
+                              text: data?.service?.address?.city,
+                            },
+                            {
+                              title: 'Postal code',
+                              text: data?.service?.address?.postalCode,
+                            },
+                            {
+                              title: 'Street',
+                              text: data?.service?.address?.street,
+                            },
+                          ]
+                        : []
+                    }
+                  />
+                </>
+              )}
             />
 
-            <Field type="text" name="name" label="Name" component={Input} />
-
-            <Field
-              type="text"
-              name="phone"
-              label="Phone number"
-              component={Input}
-            />
-
-            <Field type="text" name="web" label="Website" component={Input} />
-
-            <Button
-              style={{ marginTop: 16 }}
-              title="Save"
-              onPress={handleSubmit}
-            />
+            <Box padding="xl">
+              <Button
+                style={{ marginTop: 16 }}
+                title="Save"
+                onPress={handleSubmit}
+              />
+            </Box>
           </>
         )}
       </Formik>

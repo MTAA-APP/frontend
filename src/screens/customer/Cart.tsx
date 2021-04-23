@@ -118,7 +118,7 @@ const Cart = ({ navigation }: Props) => {
                       marginLeft="m"
                       fontFamily="Rubik_500Medium"
                     >
-                      {item?.amount}x {item?.item?.price}€
+                      {item?.amount}x {item?.item?.price?.toFixed(2)}€
                     </Text>
                   </Box>
                 </Item>

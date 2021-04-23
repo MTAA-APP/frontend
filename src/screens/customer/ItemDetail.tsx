@@ -66,7 +66,7 @@ const ItemDetail = ({ navigation, route: { params } }: Props) => {
                   fontSize={50}
                   lineHeight={56}
                 >
-                  {data?.item?.price}
+                  {data?.item?.price?.toFixed(2)}
                 </Text>
                 <Text
                   marginLeft="s"

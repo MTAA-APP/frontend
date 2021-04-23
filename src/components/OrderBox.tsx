@@ -91,8 +91,9 @@ const OrderBox = ({
             />
           </Box>
 
-          <Box flexDirection="column">
+          <Box flexDirection="column" flex={1}>
             <Text variant="order">{title}</Text>
+
             {children}
           </Box>
         </Box>

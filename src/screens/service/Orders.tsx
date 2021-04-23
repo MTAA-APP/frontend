@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { FlatList, RefreshControl } from 'react-native'
 import { useMutation, useQuery } from '@apollo/client'
@@ -9,7 +9,7 @@ import { OrderBox } from 'components'
 import { useContext } from 'hooks'
 import { keyIdExtractor } from 'utils/functions'
 import { formatDate } from 'utils/date'
-import { Order } from 'types/datamodels'
+import { Order, OrderInfo } from 'types/datamodels'
 import { Status } from 'types/enums'
 import { STATUS, PAYMENT } from 'constants/enums'
 import { NEXT_STATUS_ICON } from 'constants/icons'
@@ -20,10 +20,10 @@ import { UPDATE_ORDER_STATUS } from 'apollo/mutations'
 
 type Props = StackScreenProps<RootStackParamList, 'Orders'>
 
-type QueryType = { orders: Order[] }
-type MutationType = { order: Order }
+type OrderI = Order & { items: OrderInfo }
 
-// TODO: bottom bar
+type QueryType = { orders: OrderI[] }
+type MutationType = { order: Order }
 
 const Orders = ({ navigation }: Props) => {
   const { show } = useContext('snackbar')
@@ -49,6 +49,16 @@ const Orders = ({ navigation }: Props) => {
         })
       )
   }, [])
+
+  const summary = useMemo(
+    () =>
+      data?.orders?.reduce((acc, curr: Order) => {
+        const status = curr?.status
+        acc[status] = (acc[status] || 0) + 1
+        return acc
+      }, {}),
+    [data]
+  )
 
   return (
     <>
@@ -85,22 +95,52 @@ const Orders = ({ navigation }: Props) => {
                 {`${STATUS[item?.status]} - ${PAYMENT[item?.payment]}`}
               </Text>
 
-              <Text variant="label">
+              <Text variant="label" marginBottom="s">
                 Created at {formatDate(item?.createdAt)}
               </Text>
+
+              <Box
+                height={40}
+                style={{ marginLeft: -16, marginBottom: -16, marginRight: -16 }}
+                backgroundColor="primary"
+                paddingVertical="s"
+                paddingHorizontal="l"
+                borderTopLeftRadius={30}
+                borderBottomRightRadius={30}
+                justifyContent="center"
+              >
+                <Text color="background" fontFamily="Rubik_500Medium">
+                  Contains {item?.items?.count} items for{' '}
+                  {item?.items?.price?.toFixed(2)} €
+                </Text>
+              </Box>
             </OrderBox>
           )}
         />
       </Box>
 
-      <Box
-        backgroundColor="title"
-        padding="xl"
-        borderTopLeftRadius={18}
-        borderTopRightRadius={18}
-      >
-        <Text>TODO</Text>
-      </Box>
+      {!!summary && (
+        <Box
+          backgroundColor="title"
+          padding="xl"
+          paddingBottom="l"
+          borderTopLeftRadius={18}
+          borderTopRightRadius={18}
+        >
+          {Object.entries(summary)?.map((item) => (
+            <Box key={item?.[0]} marginBottom="s" flexDirection="row">
+              <Box flex={2}>
+                <Text fontFamily="Rubik_500Medium" color="background">
+                  {STATUS[item?.[0]]}:
+                </Text>
+              </Box>
+              <Box flex={1}>
+                <Text>{item?.[1]} orders</Text>
+              </Box>
+            </Box>
+          ))}
+        </Box>
+      )}
     </>
   )
 }

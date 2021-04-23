@@ -10,12 +10,15 @@ export default gql`
       completedAt
       total
       service @type(name: "Service") {
+        id
         name
       }
       items @type(name: "[OrderItem]") {
+        id
         amount
         total
         item @type(name: "Item") {
+          id
           name
           price
         }

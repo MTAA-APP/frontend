@@ -4,13 +4,15 @@ import { FlatList, RefreshControl } from 'react-native'
 import { useQuery } from '@apollo/client'
 
 import { RootStackParamList } from 'types/stack'
-import { Box, Button, NoData, Search } from 'ui'
+import { Box, Button, NoData, Search, Text } from 'ui'
 import { Item, ItemModal } from 'components'
 import { useModal } from 'hooks'
 import { Item as ItemType } from 'types/datamodels'
 
 import { GET_ITEMS } from 'apollo/queries'
 import { ITEM_CATEGORY } from 'constants/enums'
+
+import EDIT_ICON from 'assets/icons/pen.png'
 
 type Props = StackScreenProps<RootStackParamList, 'MyMenu'>
 
@@ -57,7 +59,29 @@ const Menu = ({ navigation }: Props) => {
             description={ITEM_CATEGORY[item?.categories?.[0]]}
             picture={item?.picture}
             handlePress={() => show(item)}
-          />
+            leftIcon={EDIT_ICON}
+            handleLeftPress={() => show(item)}
+            handleRightPress={() => console.log('TODO')}
+          >
+            <Box
+              style={{ marginLeft: -24, marginBottom: -24 }}
+              flexDirection="row"
+            >
+              <Box
+                height={40}
+                backgroundColor="primary"
+                paddingVertical="s"
+                paddingHorizontal="l"
+                borderBottomLeftRadius={30}
+                borderTopRightRadius={30}
+                justifyContent="center"
+              >
+                <Text color="background" fontFamily="Rubik_500Medium">
+                  {item?.price.toFixed(2)} €
+                </Text>
+              </Box>
+            </Box>
+          </Item>
         )}
       />
 
