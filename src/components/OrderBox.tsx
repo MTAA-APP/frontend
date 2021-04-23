@@ -12,10 +12,10 @@ import CLOSE_ICON from 'assets/icons/close.png'
 
 type Props = {
   title?: string
-  leftIcon: number
+  leftIcon?: number
   status: Status
   children?: Children
-  handlePress: () => void
+  handlePress?: () => void
   handleLeftPress?: () => void
   handleRightPress?: () => void
 }
@@ -41,7 +41,7 @@ const OrderBox = ({
             variant="secondary"
             side="left"
             backgroundColor="secondary"
-            icon={leftIcon}
+            icon={leftIcon || CLOSE_ICON}
             onPress={() => {
               handleLeftPress()
               ref?.current?.close()

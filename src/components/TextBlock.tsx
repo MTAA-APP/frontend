@@ -35,9 +35,11 @@ const TextBlock = ({ title, data, onPress, style }: Props) => (
         paddingBottom="s"
       >
         <Text variant="subtitle">{title}</Text>
-        <Text variant="label" color="selected">
-          press to edit
-        </Text>
+        {!!onPress && (
+          <Text variant="label" color="selected">
+            press to edit
+          </Text>
+        )}
       </Box>
 
       <FlatList

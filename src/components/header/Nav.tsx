@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { Image } from 'react-native'
+import { FlatList, Image } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import { RootStackParamList } from 'types/stack'
@@ -17,11 +17,20 @@ import PROFILE_ICON from 'assets/icons/person.png'
 import ORDERS_ICON from 'assets/icons/orders.png'
 import ITEMS_ICON from 'assets/icons/items.png'
 
+type NavItem = {
+  icon: number
+  route: keyof RootStackParamList
+  visible: boolean
+}
+
 const Nav = () => {
   const navigation = useNavigation()
 
   const { user, logout } = useContext('auth')
   const { isVisible, show, hide } = useToggle()
+
+  const isService: boolean = useMemo(() => user?.role === Role.SERVICE, [user])
+  const keyExtractor = useCallback((_, idx: number) => `nav-${idx}`, [])
 
   const navigate = useCallback(
     (route: keyof RootStackParamList) => () => {
@@ -29,6 +38,25 @@ const Nav = () => {
       hide()
     },
     [navigation]
+  )
+
+  const navItems: NavItem[] = useMemo(
+    () => [
+      {
+        icon: HOME_ICON,
+        route: isService ? 'Orders' : 'Services',
+        visible: true,
+      },
+      { icon: CART_ICON, route: 'Cart', visible: !isService },
+      { icon: ORDERS_ICON, route: 'MyOrders', visible: !isService },
+      { icon: ITEMS_ICON, route: 'MyMenu', visible: isService },
+      {
+        icon: PROFILE_ICON,
+        route: isService ? 'ServiceProfile' : 'CustomerProfile',
+        visible: true,
+      },
+    ],
+    [user]
   )
 
   return (
@@ -41,7 +69,6 @@ const Nav = () => {
           padding="s"
           top={-18}
           right={-12}
-          elevation={30}
           borderRadius={200}
           zIndex={1000}
         >
@@ -53,70 +80,25 @@ const Nav = () => {
             />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={{ padding: 16 }}
-            onPress={navigate(
-              user?.role === Role.SERVICE ? 'Orders' : 'Services'
-            )}
-          >
-            <Image
-              source={HOME_ICON}
-              style={{ width: 18, height: 18 }}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-
-          {user?.role === Role.CUSTOMER && (
-            <TouchableOpacity
-              style={{ padding: 16 }}
-              onPress={navigate('Cart')}
-            >
-              <Image
-                source={CART_ICON}
-                style={{ width: 18, height: 18 }}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-          )}
-
-          {user?.role === Role.CUSTOMER && (
-            <TouchableOpacity
-              style={{ padding: 16 }}
-              onPress={navigate('MyOrders')}
-            >
-              <Image
-                source={ORDERS_ICON}
-                style={{ width: 18, height: 18 }}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-          )}
-
-          {user?.role === Role.SERVICE && (
-            <TouchableOpacity
-              style={{ padding: 16 }}
-              onPress={navigate('MyMenu')}
-            >
-              <Image
-                source={ITEMS_ICON}
-                style={{ width: 18, height: 18 }}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-          )}
-
-          <TouchableOpacity
-            style={{ padding: 16 }}
-            onPress={navigate(
-              user?.role === Role.SERVICE ? 'ServiceProfile' : 'CustomerProfile'
-            )}
-          >
-            <Image
-              source={PROFILE_ICON}
-              style={{ width: 18, height: 18 }}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
+          <FlatList
+            data={navItems}
+            keyExtractor={keyExtractor}
+            renderItem={({ item }) =>
+              item.visible ? (
+                <TouchableOpacity
+                  onPress={navigate(item.route)}
+                  style={{ width: 50, height: 50, padding: 16 }}
+                >
+                  <Image
+                    accessible
+                    source={item.icon}
+                    style={{ width: '100%', height: '100%' }}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              ) : null
+            }
+          />
 
           <TouchableOpacity style={{ padding: 16 }} onPress={logout}>
             <Image

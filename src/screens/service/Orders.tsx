@@ -33,7 +33,7 @@ const Orders = ({ navigation }: Props) => {
 
   const handleStatusChange = useCallback((id: string, status: Status) => {
     updateStatus({
-      variables: { body: { id: id, status: NEXT_STATUS[status] } },
+      variables: { body: { id, status: NEXT_STATUS[status] } },
     })
       .then(() => {
         refetch()

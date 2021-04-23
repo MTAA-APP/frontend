@@ -89,7 +89,7 @@ const ServiceDetail = ({ navigation, route: { params } }: Props) => {
       </Box>
 
       <Box flex={2}>
-        <Box padding="xl">
+        <Box padding="xl" paddingBottom="l">
           <Text variant="title">{data?.service?.name}</Text>
           <Text marginBottom="xs">{data?.service?.description}</Text>
           <Text variant="label">
@@ -100,6 +100,7 @@ const ServiceDetail = ({ navigation, route: { params } }: Props) => {
         <FlatList
           data={[1]}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingTop: 10 }}
           keyExtractor={(_, idx) => `${idx}`}
           renderItem={() => (
             <>
