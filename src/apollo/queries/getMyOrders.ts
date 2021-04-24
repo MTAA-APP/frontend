@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 export default gql`
   query getMyOrders {
-    orders @rest(type: "[Order]", path: "/orders/history") {
+    orders @rest(type: "Order", path: "/orders/history") {
       id
       status
       payment
@@ -13,7 +13,7 @@ export default gql`
         id
         name
       }
-      items @type(name: "[OrderItem]") {
+      items @type(name: "OrderItem") {
         id
         amount
         total

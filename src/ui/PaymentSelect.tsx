@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Image, TouchableHighlight } from 'react-native'
 import { FieldProps } from 'formik'
 
@@ -8,14 +8,13 @@ import { Payment } from 'types/enums'
 import { PAYMENT } from 'constants/enums'
 import { PAYMENT_ICON } from 'constants/icons'
 
-// TODO: fix
+type Props = FieldProps & {
+  onChange: (field: string, value: Payment) => void
+}
 
-const PaymentSelect = ({
-  field: { name, value, onChange },
-  form: { errors },
-  meta,
-  ...rest
-}: FieldProps) => {
+const PaymentSelect = ({ onChange, field: { name, value }, meta }: Props) => {
+  const onPress = useCallback((value: Payment) => onChange(name, value), [name])
+
   return (
     <Box paddingVertical="m">
       <Text variant="label" marginBottom="s">
@@ -26,7 +25,7 @@ const PaymentSelect = ({
         {Object.values(Payment)?.map((item) => (
           <TouchableHighlight
             key={item}
-            onPress={() => onChange(item)}
+            onPress={() => onPress(item)}
             style={{ width: '31%', borderRadius: 18 }}
           >
             <Box

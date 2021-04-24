@@ -5,14 +5,15 @@ import * as Yup from 'yup'
 import { useMutation } from '@apollo/client'
 import { Image } from 'react-native'
 
-import { BottomInfo, Box, Button, Input, Text } from 'ui'
-import { useContext } from 'hooks'
+import { BottomInfo, Box, Button, Input, OverlayLoading, Text } from 'ui'
+import { useContext, useToggle } from 'hooks'
 import { RootStackParamList } from 'types/stack'
 import { AuthPayload } from 'types/datamodels'
 
 import { SIGN_IN } from 'apollo/mutations'
 
 import PLACEHOLDER from 'assets/images/image-placeholder.png'
+import { ActivityIndicator } from 'react-native-paper'
 
 type Props = StackScreenProps<RootStackParamList, 'SignIn'>
 
@@ -38,15 +39,22 @@ const SignIn = ({ navigation }: Props) => {
 
   const { login } = useContext('auth')
   const { show } = useContext('snackbar')
+  const {
+    isVisible: loading,
+    show: showLoading,
+    hide: hideLoading,
+  } = useToggle()
 
   const onSubmit = useCallback((values: FormValues) => {
     signin({ variables: { body: values } })
       .then(({ data, errors }) => {
+        showLoading()
         if (!data?.signin || !!errors) throw Error()
         login(data?.signin?.token)
         show({ text: 'Successfully logged in', variant: 'success' })
       })
       .catch(({ networkError }) => {
+        hideLoading()
         if (networkError?.message?.includes('401'))
           show({ text: 'Wrong password!', variant: 'error' })
         else show({ text: 'Account not found!', variant: 'error' })
@@ -66,7 +74,12 @@ const SignIn = ({ navigation }: Props) => {
         resizeMode="cover"
       />
 
-      <Box flex={1} padding="xl" justifyContent="space-between">
+      <Box
+        flex={1}
+        padding="xl"
+        justifyContent="space-between"
+        position="relative"
+      >
         <Box marginBottom="m">
           <Text variant="title" marginBottom="xl">
             Sign in
@@ -104,6 +117,8 @@ const SignIn = ({ navigation }: Props) => {
               </>
             )}
           </Formik>
+
+          <OverlayLoading loading={loading} />
         </Box>
 
         <BottomInfo

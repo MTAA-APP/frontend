@@ -47,7 +47,7 @@ const ServiceDetail = ({ navigation, route: { params } }: Props) => {
 
   return (
     <>
-      <Box flex={1}>
+      <Box flex={1} position="relative">
         <Image
           source={{ uri: data?.service?.picture }}
           style={{
@@ -55,6 +55,15 @@ const ServiceDetail = ({ navigation, route: { params } }: Props) => {
             width: '100%',
           }}
           resizeMode="cover"
+        />
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          backgroundColor="label"
+          opacity={0.5}
         />
       </Box>
 

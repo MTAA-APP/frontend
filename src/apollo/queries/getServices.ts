@@ -7,14 +7,12 @@ export default gql`
     $category: ServiceCategory
   ) {
     services(favorites: $favorites, search: $search, category: $category)
-      @rest(type: "[Service]", path: "/services?{args}") {
+      @rest(type: "Service", path: "/services?{args}") {
       id
       name
       picture
       category
-      customers @type(name: "[Customer]") {
-        id
-      }
+      customers
     }
   }
 `

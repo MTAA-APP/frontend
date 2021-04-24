@@ -19,6 +19,7 @@ const Input = ({
   variant = 'primary',
   field: { name, value, onChange },
   form: { errors },
+  editable = true,
   meta,
   ...rest
 }: Props) => {
@@ -31,10 +32,12 @@ const Input = ({
       <Text variant="label">{label}</Text>
 
       <TextInput
-        {...{ value, onChangeText, ...rest }}
+        {...{ value, onChangeText, editable, ...rest }}
         style={{
           ...theme.textVariants.input,
-          color: theme.colors[variant === 'secondary' ? 'label' : 'title'],
+          color: editable
+            ? theme.colors[variant === 'secondary' ? 'label' : 'title']
+            : '#E2E3E5',
           borderBottomColor: '#E2E3E5',
           borderStyle: 'solid',
           borderBottomWidth: 1,

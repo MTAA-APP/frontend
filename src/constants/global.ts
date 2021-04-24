@@ -9,3 +9,5 @@ export const NEXT_STATUS = {
   CONFIRMED: Status.SENT,
   SENT: Status.COMPLETED,
 }
+
+export const PHONE_REGEX: RegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/

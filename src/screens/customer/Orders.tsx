@@ -6,10 +6,10 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import { RootStackParamList } from 'types/stack'
 import { Box, NoData, Text } from 'ui'
-import { OrderBox } from 'components'
+import { OrderBox, OrderDetail } from 'components'
 import { keyIdExtractor } from 'utils/functions'
 import { formatDate } from 'utils/date'
-import { Order, OrderInfo } from 'types/datamodels'
+import { Order } from 'types/datamodels'
 import { PAYMENT, STATUS } from 'constants/enums'
 
 import { GET_MY_ORDERS } from 'apollo/queries'
@@ -18,8 +18,7 @@ import ARROW_ICON from 'assets/icons/arrow-down.png'
 
 type Props = StackScreenProps<RootStackParamList, 'MyOrders'>
 
-type OrderI = Order & { total: OrderInfo }
-type QueryType = { orders: OrderI[] }
+type QueryType = { orders: Order[] }
 
 const Orders = ({ navigation }: Props) => {
   const [selected, setSelected] = useState<string>()
@@ -46,11 +45,7 @@ const Orders = ({ navigation }: Props) => {
           <NoData loading={loading} text="You have no orders yet." />
         }
         renderItem={({ item }) => (
-          <OrderBox
-            title={item?.service?.name}
-            status={item?.status}
-            handlePress={() => {}}
-          >
+          <OrderBox title={item?.service?.name} status={item?.status}>
             <Text variant="label">
               {`${STATUS[item?.status]} - ${PAYMENT[item?.payment]}`}
             </Text>
@@ -65,51 +60,10 @@ const Orders = ({ navigation }: Props) => {
                 marginBottom="s"
                 style={{ marginLeft: -69 }}
               >
-                <FlatList
+                <OrderDetail
                   listKey={`detail-${item?.id}`}
-                  data={item?.items}
-                  keyExtractor={keyIdExtractor}
-                  ListFooterComponent={() => (
-                    <Box paddingTop="s">
-                      <Box
-                        borderTopColor="label"
-                        borderTopWidth={1}
-                        borderStyle="dashed"
-                        borderRadius={1}
-                        flexDirection="row"
-                        paddingTop="s"
-                      >
-                        <Box flex={4}>
-                          <Text fontFamily="Rubik_500Medium">Total</Text>
-                        </Box>
-                        <Box flex={1} paddingHorizontal="s">
-                          <Text textAlign="right">{item?.total?.count}x</Text>
-                        </Box>
-                        <Box flex={2}>
-                          <Text textAlign="right">
-                            {item?.total?.price?.toFixed(2)} €
-                          </Text>
-                        </Box>
-                      </Box>
-                    </Box>
-                  )}
-                  renderItem={({ item }) => (
-                    <Box flexDirection="row" marginBottom="xs">
-                      <Box flex={4}>
-                        <Text fontFamily="Rubik_500Medium">
-                          {item?.item?.name}
-                        </Text>
-                      </Box>
-                      <Box flex={1} paddingHorizontal="s">
-                        <Text textAlign="right">{item?.amount}x</Text>
-                      </Box>
-                      <Box flex={2}>
-                        <Text textAlign="right">
-                          {item?.item?.price?.toFixed(2)} €
-                        </Text>
-                      </Box>
-                    </Box>
-                  )}
+                  items={item?.items}
+                  total={item?.total}
                 />
               </Box>
             )}

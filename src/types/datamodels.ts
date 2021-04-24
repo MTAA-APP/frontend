@@ -66,7 +66,7 @@ export type Service = {
   ratings: Rating[]
   menu: Item[]
   address?: Address
-  customers: Customer[]
+  customers: boolean
 }
 
 export type Address = {
@@ -89,7 +89,7 @@ export type Order = {
   status: Status
   completedAt?: string
   createdAt: string
-  total: number // added
+  total: OrderInfo // added
 }
 
 export type OrderItem = {

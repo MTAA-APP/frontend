@@ -156,7 +156,7 @@ const Profile = ({ navigation }: Props) => {
               )}
             />
 
-            <Box padding="xl">
+            <Box padding="xl" paddingTop="xs">
               <Button
                 style={{ marginTop: 16 }}
                 title="Save"

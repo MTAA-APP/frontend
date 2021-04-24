@@ -9,6 +9,7 @@ export default gql`
         path: "/profile/service"
         bodyKey: "body"
       ) {
+      id
       picture
       name
       phone

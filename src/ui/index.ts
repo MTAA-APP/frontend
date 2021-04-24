@@ -12,3 +12,5 @@ export { default as Button } from './Button'
 
 export { default as BottomInfo } from './BottomInfo'
 export { default as NoData } from './NoData'
+
+export { default as OverlayLoading } from './OverlayLoading'

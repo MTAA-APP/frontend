@@ -9,6 +9,7 @@ export default gql`
         path: "/profile/customer"
         bodyKey: "body"
       ) {
+      id
       firstName
       lastName
       phone

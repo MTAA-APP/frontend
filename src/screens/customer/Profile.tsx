@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
+import { FlatList } from 'react-native'
 import * as Yup from 'yup'
 import { useMutation, useQuery } from '@apollo/client'
 import { Field, Formik } from 'formik'
@@ -7,9 +8,11 @@ import AppLoading from 'expo-app-loading'
 
 import { RootStackParamList } from 'types/stack'
 import { Box, Button, Input, PaymentSelect } from 'ui'
+import { TextBlock } from 'components'
 import { useContext } from 'hooks'
 import { Customer } from 'types/datamodels'
 import { Payment } from 'types/enums'
+import { PHONE_REGEX } from 'constants/global'
 
 import { GET_CUSTOMER_PROFILE } from 'apollo/queries'
 import { UPDATE_CUSTOMER } from 'apollo/mutations'
@@ -28,7 +31,7 @@ const validationSchema = Yup.object().shape({
   email: Yup.string().email().required(),
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
-  phone: Yup.string(),
+  phone: Yup.string().matches(PHONE_REGEX, 'phone number is not valid'),
 })
 
 type QueryType = { customer: Customer }
@@ -52,6 +55,7 @@ const Profile = ({ navigation }: Props) => {
   )
 
   const onSubmit = useCallback(({ email, ...values }: FormValues) => {
+    console.log(values)
     updateCustomer({ variables: { body: values } })
       .then(() =>
         show({ text: 'Profile data successfully updated.', variant: 'success' })
@@ -64,54 +68,96 @@ const Profile = ({ navigation }: Props) => {
   if (loading) return <AppLoading />
 
   return (
-    <Box flex={1} padding="xl" paddingTop="xxxl">
+    <Box flex={1} paddingTop="xxxl">
       <Formik
         {...{ initialValues, onSubmit, validationSchema }}
         validateOnChange
       >
-        {({ handleSubmit }) => (
-          <Box flex={1} justifyContent="space-between">
-            <Box>
-              <Field
-                keyboardType="email-address"
-                textContentType="emailAddress"
-                editable={false}
-                type="email"
-                name="email"
-                label="Email address"
-                component={Input}
-              />
+        {({ handleSubmit, setFieldValue }) => (
+          <>
+            <FlatList
+              data={[1]}
+              contentContainerStyle={{ paddingHorizontal: 30 }}
+              keyExtractor={() => 'customerProfile'}
+              renderItem={() => (
+                <>
+                  <Field
+                    keyboardType="email-address"
+                    textContentType="emailAddress"
+                    editable={false}
+                    type="email"
+                    name="email"
+                    label="Email address"
+                    component={Input}
+                  />
 
-              <Field
-                type="text"
-                name="firstName"
-                label="First name"
-                component={Input}
-              />
+                  <Field
+                    type="text"
+                    name="firstName"
+                    label="First name"
+                    component={Input}
+                  />
 
-              <Field
-                type="text"
-                name="lastName"
-                label="Last name"
-                component={Input}
-              />
+                  <Field
+                    type="text"
+                    name="lastName"
+                    label="Last name"
+                    component={Input}
+                  />
 
-              <Field
-                type="text"
-                name="phone"
-                label="Phone number"
-                component={Input}
-              />
+                  <Field
+                    type="text"
+                    name="phone"
+                    label="Phone number"
+                    component={Input}
+                  />
 
-              <Field type="text" name="payment" component={PaymentSelect} />
-            </Box>
+                  <Field
+                    type="text"
+                    name="payment"
+                    onChange={setFieldValue}
+                    component={PaymentSelect}
+                  />
 
-            <Button
-              style={{ marginTop: 16 }}
-              title="Save"
-              onPress={handleSubmit}
+                  <TextBlock
+                    style={{ marginTop: 16 }}
+                    title="Your address"
+                    onPress={() => {}}
+                    data={
+                      !!data?.customer?.address
+                        ? [
+                            {
+                              title: 'Country',
+                              text: data?.customer?.address?.country,
+                            },
+                            {
+                              title: 'City',
+                              text: data?.customer?.address?.city,
+                            },
+                            {
+                              title: 'Postal code',
+                              text: data?.customer?.address?.postalCode,
+                            },
+                            {
+                              title: 'Street',
+                              text: data?.customer?.address?.street,
+                            },
+                          ]
+                        : []
+                    }
+                  />
+                </>
+              )}
             />
-          </Box>
+
+            <Box padding="xl" paddingTop="xs">
+              <Button
+                style={{ marginTop: 16 }}
+                title="Save"
+                onPress={handleSubmit}
+              />
+            </Box>
+          </>
         )}
       </Formik>
     </Box>

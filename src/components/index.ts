@@ -14,3 +14,4 @@ export { default as ItemModal } from './ItemModal'
 
 export { default as TextBlock } from './TextBlock'
 export { default as BottomCart } from './BottomCart'
+export { default as OrderDetail } from './OrderDetail'

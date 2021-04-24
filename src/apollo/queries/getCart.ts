@@ -8,7 +8,7 @@ export default gql`
       status
       createdAt
       completedAt
-      items @type(name: "[OrderItem]") {
+      items @type(name: "OrderItem") {
         id
         amount
         item @type(name: "Item") {

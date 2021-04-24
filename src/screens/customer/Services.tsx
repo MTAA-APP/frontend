@@ -22,8 +22,6 @@ type Props = StackScreenProps<RootStackParamList, 'Home'>
 
 type QueryType = { services: Service[] }
 
-const isFavorite = (item: Service): boolean => !!item?.customers?.length
-
 const Services = ({ navigation }: Props) => {
   const { show } = useContext('snackbar')
 
@@ -143,13 +141,13 @@ const Services = ({ navigation }: Props) => {
             leftIcon={WHITE_STAR_ICON}
             handlePress={() => navigation.navigate('Service', { id: item?.id })}
             handleLeftPress={
-              isFavorite(item) ? undefined : () => handleAdd(item?.id)
+              item?.customers ? undefined : () => handleAdd(item?.id)
             }
             handleRightPress={
-              isFavorite(item) ? () => handleRemove(item?.id) : undefined
+              item?.customers ? () => handleRemove(item?.id) : undefined
             }
           >
-            {isFavorite(item) && (
+            {!!item?.customers && (
               <Box
                 style={{ marginLeft: -24, marginBottom: -24 }}
                 width={60}

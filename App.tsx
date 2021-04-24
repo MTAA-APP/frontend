@@ -11,7 +11,6 @@ import { AuthProvider } from './src/contexts/AuthContext'
 import { SnackbarProvider } from './src/contexts/SnackbarContext'
 
 import theme from './src/styles/theme'
-
 // TODO: splash screen
 
 const App = () => (

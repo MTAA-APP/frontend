@@ -11,7 +11,7 @@ export default gql`
       phone
       web
       category
-      openingHours @type(name: "[OpeningHour]") {
+      openingHours @type(name: "OpeningHour") {
         day
         from
         to
