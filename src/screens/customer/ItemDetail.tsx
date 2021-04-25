@@ -10,7 +10,7 @@ import { useContext } from 'hooks'
 import { Item, OrderItem } from 'types/datamodels'
 import { ITEM_CATEGORY } from 'constants/enums'
 
-import { GET_CART_INFO, GET_ITEM } from 'apollo/queries'
+import { GET_CART, GET_CART_INFO, GET_ITEM } from 'apollo/queries'
 import { CREATE_ORDER_ITEM } from 'apollo/mutations'
 
 import MEAL_ICON from 'assets/icons/meal.png'
@@ -33,7 +33,7 @@ const ItemDetail = ({ navigation, route: { params } }: Props) => {
   const handleAdd = useCallback(() => {
     addItem({
       variables: { body: { id: params?.id } },
-      refetchQueries: [{ query: GET_CART_INFO }],
+      refetchQueries: [{ query: GET_CART_INFO }, { query: GET_CART }],
     })
       .then(() => show({ text: 'Item added to cart.', variant: 'success' }))
       .catch(() => show({ text: 'Cannot add item to cart!', variant: 'error' }))

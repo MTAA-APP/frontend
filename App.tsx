@@ -2,6 +2,7 @@ import React from 'react'
 import { ApolloProvider } from '@apollo/client'
 import { ThemeProvider } from '@shopify/restyle'
 import 'react-native-gesture-handler'
+import { LogBox } from 'react-native'
 
 import client from './src/apollo'
 import Router from './src/Router'
@@ -11,7 +12,8 @@ import { AuthProvider } from './src/contexts/AuthContext'
 import { SnackbarProvider } from './src/contexts/SnackbarContext'
 
 import theme from './src/styles/theme'
-// TODO: splash screen
+
+LogBox.ignoreLogs(['Setting a timer'])
 
 const App = () => (
   <ApolloProvider {...{ client }}>

@@ -2,8 +2,8 @@ import React from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { Image } from 'react-native'
 
-import { Box, Button, Text } from 'ui'
 import { RootStackParamList } from 'types/stack'
+import { Box, Button, Text } from 'ui'
 
 import PLACEHOLDER from 'assets/images/image-placeholder.png'
 

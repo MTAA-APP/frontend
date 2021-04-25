@@ -4,6 +4,7 @@ export default gql`
   mutation createItem($body: CreateItemBody!) {
     item: publish(body: $body)
       @rest(type: "Item", method: "POST", path: "/items", bodyKey: "body") {
+      id
       photo
       name
       description

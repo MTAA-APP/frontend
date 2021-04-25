@@ -11,6 +11,7 @@ export { default as OrderBox } from './OrderBox'
 
 // Modal
 export { default as ItemModal } from './ItemModal'
+export { default as AddressModal } from './AddressModal'
 
 export { default as TextBlock } from './TextBlock'
 export { default as BottomCart } from './BottomCart'

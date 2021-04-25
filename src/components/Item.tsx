@@ -15,7 +15,7 @@ type Props = {
   description?: string
   picture?: string
   leftIcon?: number
-  handlePress: () => void
+  handlePress?: () => void
   handleLeftPress?: () => void
   handleRightPress?: () => void
   children?: Children
@@ -96,7 +96,7 @@ const Item = ({
               borderRadius: 30,
               marginRight: variant === 'secondary' ? -10 : 0,
             }}
-            resizeMode={variant === 'secondary' ? 'center' : 'cover'}
+            resizeMode={variant === 'secondary' ? 'contain' : 'cover'}
           />
         </Box>
       </TouchableWithoutFeedback>

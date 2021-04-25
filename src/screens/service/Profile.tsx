@@ -2,22 +2,24 @@ import React, { useCallback, useMemo } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import * as Yup from 'yup'
 import { useMutation, useQuery } from '@apollo/client'
-import { FlatList, Image } from 'react-native'
+import { FlatList } from 'react-native'
 import { Field, Formik } from 'formik'
 import AppLoading from 'expo-app-loading'
 
 import { RootStackParamList } from 'types/stack'
-import { Box, Button, Input, Text } from 'ui'
-import { useContext } from 'hooks'
-import { Service } from 'types/datamodels'
+import { Box, Button, Input, SelectImage } from 'ui'
+import { AddressModal, TextBlock } from 'components'
+import { useContext, useFirebase, useModal } from 'hooks'
+import { Address, Service } from 'types/datamodels'
+import { Role } from 'types/enums'
 
 import { GET_SERVICE_PROFILE } from 'apollo/queries'
 import { UPDATE_SERVICE } from 'apollo/mutations'
-import { TextBlock } from 'components'
 
 type Props = StackScreenProps<RootStackParamList, 'ServiceProfile'>
 
 type FormValues = {
+  picture: string
   email: string
   name: string
   phone: string
@@ -34,16 +36,18 @@ const validationSchema = Yup.object().shape({
 type QueryType = { service: Service }
 type MutationType = { updateService: Service }
 
-// TODO: picture, address
-
 const Profile = ({ navigation }: Props) => {
-  const { show } = useContext('snackbar')
+  const { show: showSnackbar } = useContext('snackbar')
+
+  const { upload } = useFirebase('profile')
+  const { state, show, hide } = useModal<Address>()
 
   const { data, loading } = useQuery<QueryType>(GET_SERVICE_PROFILE)
   const [updateService] = useMutation<MutationType>(UPDATE_SERVICE)
 
   const initialValues: FormValues = useMemo(
     () => ({
+      picture: data?.service?.picture || '',
       email: data?.service?.email || '',
       name: data?.service?.name || '',
       phone: data?.service?.phone || '',
@@ -52,15 +56,35 @@ const Profile = ({ navigation }: Props) => {
     [data]
   )
 
-  const onSubmit = useCallback(({ email, ...values }: FormValues) => {
-    updateService({ variables: { body: values } })
-      .then(() =>
-        show({ text: 'Profile data successfully updated.', variant: 'success' })
-      )
-      .catch(() =>
-        show({ text: 'Failed to update profile data!', variant: 'error' })
-      )
-  }, [])
+  const handleUpdate = useCallback(
+    (values, url?: string) => {
+      updateService({ variables: { body: { picture: url, ...values } } })
+        .then(() =>
+          showSnackbar({
+            text: 'Profile data successfully updated.',
+            variant: 'success',
+          })
+        )
+        .catch(() =>
+          showSnackbar({
+            text: 'Failed to update profile data!',
+            variant: 'error',
+          })
+        )
+    },
+    [updateService]
+  )
+
+  const onSubmit = useCallback(
+    ({ email, picture, ...values }: FormValues) => {
+      if (!!picture && !!data && picture !== data?.service?.picture)
+        upload(picture, data?.service?.id, (url: string) =>
+          handleUpdate(values, url)
+        )
+      else handleUpdate(values, data?.service?.picture)
+    },
+    [upload, handleUpdate, data]
+  )
 
   if (loading) return <AppLoading />
 
@@ -70,29 +94,21 @@ const Profile = ({ navigation }: Props) => {
         {...{ initialValues, onSubmit, validationSchema }}
         validateOnChange
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, setFieldValue }) => (
           <>
             <FlatList
               data={[1]}
               contentContainerStyle={{ paddingHorizontal: 30 }}
-              keyExtractor={() => 'customerProfile'}
+              keyExtractor={() => 'serviceProfile'}
               renderItem={() => (
                 <>
-                  <Box marginBottom="xl">
-                    <Text paddingBottom="m" variant="label">
-                      Picture
-                    </Text>
-
-                    <Image
-                      source={{ uri: data?.service?.picture }}
-                      style={{
-                        width: '100%',
-                        height: 150,
-                        borderRadius: 18,
-                      }}
-                      resizeMode="cover"
-                    />
-                  </Box>
+                  <Field
+                    type="text"
+                    name="picture"
+                    label="Picture"
+                    onChange={setFieldValue}
+                    component={SelectImage}
+                  />
 
                   <Field
                     keyboardType="email-address"
@@ -128,7 +144,7 @@ const Profile = ({ navigation }: Props) => {
                   <TextBlock
                     title="Address"
                     style={{ marginTop: 16 }}
-                    onPress={() => console.log('TODO')}
+                    onPress={() => show(data?.service?.address)}
                     data={
                       !!data?.service?.address
                         ? [
@@ -166,8 +182,15 @@ const Profile = ({ navigation }: Props) => {
           </>
         )}
       </Formik>
+
+      <AddressModal
+        type={Role.SERVICE}
+        data={state?.data}
+        isVisible={state?.visible}
+        onClose={hide}
+      />
     </Box>
   )
 }
 
-export default Profile
+export default React.memo(Profile)

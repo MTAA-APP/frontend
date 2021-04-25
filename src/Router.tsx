@@ -31,11 +31,6 @@ import { Theme } from 'styles/theme'
 
 const Stack = createStackNavigator<RootStackParamList>()
 
-// TODO: headers
-// TODO: protected routes
-// TODO: config routes
-// TODO: add ids to BE and FE
-
 const Router = () => {
   const { isLogged, loading, user } = useContext('auth')
 

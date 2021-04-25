@@ -8,10 +8,10 @@ import AppLoading from 'expo-app-loading'
 
 import { RootStackParamList } from 'types/stack'
 import { Box, Button, Input, PaymentSelect } from 'ui'
-import { TextBlock } from 'components'
-import { useContext } from 'hooks'
-import { Customer } from 'types/datamodels'
-import { Payment } from 'types/enums'
+import { AddressModal, TextBlock } from 'components'
+import { useContext, useModal } from 'hooks'
+import { Address, Customer } from 'types/datamodels'
+import { Payment, Role } from 'types/enums'
 import { PHONE_REGEX } from 'constants/global'
 
 import { GET_CUSTOMER_PROFILE } from 'apollo/queries'
@@ -38,7 +38,9 @@ type QueryType = { customer: Customer }
 type MutationType = { updateCustomer: Customer }
 
 const Profile = ({ navigation }: Props) => {
-  const { show } = useContext('snackbar')
+  const { show: showSnackbar } = useContext('snackbar')
+
+  const { state, show, hide } = useModal<Address>()
 
   const { data, loading } = useQuery<QueryType>(GET_CUSTOMER_PROFILE)
   const [updateCustomer] = useMutation<MutationType>(UPDATE_CUSTOMER)
@@ -54,16 +56,24 @@ const Profile = ({ navigation }: Props) => {
     [data]
   )
 
-  const onSubmit = useCallback(({ email, ...values }: FormValues) => {
-    console.log(values)
-    updateCustomer({ variables: { body: values } })
-      .then(() =>
-        show({ text: 'Profile data successfully updated.', variant: 'success' })
-      )
-      .catch(() =>
-        show({ text: 'Failed to update profile data!', variant: 'error' })
-      )
-  }, [])
+  const onSubmit = useCallback(
+    ({ email, ...values }: FormValues) => {
+      updateCustomer({ variables: { body: values } })
+        .then(() =>
+          showSnackbar({
+            text: 'Profile data successfully updated.',
+            variant: 'success',
+          })
+        )
+        .catch(() =>
+          showSnackbar({
+            text: 'Failed to update profile data!',
+            variant: 'error',
+          })
+        )
+    },
+    [updateCustomer]
+  )
 
   if (loading) return <AppLoading />
 
@@ -122,7 +132,7 @@ const Profile = ({ navigation }: Props) => {
                   <TextBlock
                     style={{ marginTop: 16 }}
                     title="Your address"
-                    onPress={() => {}}
+                    onPress={() => show(data?.customer?.address)}
                     data={
                       !!data?.customer?.address
                         ? [
@@ -160,6 +170,13 @@ const Profile = ({ navigation }: Props) => {
           </>
         )}
       </Formik>
+
+      <AddressModal
+        type={Role.CUSTOMER}
+        data={state?.data}
+        isVisible={state?.visible}
+        onClose={hide}
+      />
     </Box>
   )
 }

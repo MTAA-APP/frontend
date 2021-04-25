@@ -7,16 +7,16 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import { RootStackParamList } from 'types/stack'
 import { Box, Text, Button } from 'ui'
+import { BottomCart, TextBlock } from 'components'
 import { Service } from 'types/datamodels'
 import { makeCall, openUrl } from 'utils/functions'
+import { getTime } from 'utils/date'
 import { DAY } from 'constants/enums'
+import { SERVICE_CATEGORY } from 'constants/enums'
 
 import { GET_SERVICE } from 'apollo/queries'
 
 import PHONE_ICON from 'assets/icons/phone.png'
-import { SERVICE_CATEGORY } from 'constants/enums'
-import { BottomCart, TextBlock } from 'components'
-import { getTime } from 'utils/date'
 
 type Props = StackScreenProps<RootStackParamList, 'Service'>
 

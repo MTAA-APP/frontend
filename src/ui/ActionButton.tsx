@@ -31,7 +31,7 @@ const ActionButton = ({
     <Box
       {...rest}
       flex={1}
-      width={variant === 'secondary' ? 50 : 80}
+      width={variant === 'secondary' ? 60 : 80}
       borderRadius={30}
       marginVertical="s"
       justifyContent="center"

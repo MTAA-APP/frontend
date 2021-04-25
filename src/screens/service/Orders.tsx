@@ -87,7 +87,7 @@ const Orders = ({ navigation }: Props) => {
               }
               handleRightPress={
                 item?.status === Status.READY
-                  ? () => console.log('TODO') // TODO: add status
+                  ? () => alert('Not supported yet!') // TODO: add status
                   : undefined
               }
             >
@@ -119,7 +119,7 @@ const Orders = ({ navigation }: Props) => {
         />
       </Box>
 
-      {!!summary && (
+      {!!data?.orders?.length && !!summary && (
         <Box
           backgroundColor="title"
           padding="xl"

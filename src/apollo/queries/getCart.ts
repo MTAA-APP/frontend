@@ -12,13 +12,22 @@ export default gql`
         id
         amount
         item @type(name: "Item") {
+          id
           name
           picture
           price
           categories
         }
       }
-      customer @type(name: "Customer") {
+      service @type(name: "Service") {
+        id
+        name
+      }
+      total @type(name: "OrderInfo") {
+        count
+        price
+      }
+      owner @type(name: "Customer") {
         payment
         address @type(name: "Address") {
           country

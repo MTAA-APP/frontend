@@ -12,7 +12,7 @@ import { keyIdExtractor } from 'utils/functions'
 import { Item as ItemData, OrderItem } from 'types/datamodels'
 import { ITEM_CATEGORY } from 'constants/enums'
 
-import { GET_CART_INFO, GET_MENU } from 'apollo/queries'
+import { GET_CART, GET_CART_INFO, GET_MENU } from 'apollo/queries'
 import { CREATE_ORDER_ITEM } from 'apollo/mutations'
 
 import CART_ICON from 'assets/icons/white-cart.png'
@@ -38,7 +38,7 @@ const Menu = ({ navigation, route: { params } }: Props) => {
   const handleAdd = useCallback((id: string) => {
     addItem({
       variables: { body: { id } },
-      refetchQueries: [{ query: GET_CART_INFO }],
+      refetchQueries: [{ query: GET_CART_INFO }, { query: GET_CART }],
     })
       .then(() => show({ text: 'Item added to cart.', variant: 'success' }))
       .catch(() => show({ text: 'Cannot add item to cart!', variant: 'error' }))

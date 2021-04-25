@@ -3,13 +3,20 @@ import { Modal } from 'react-native'
 import GestureRecognizer from 'react-native-swipe-gestures'
 import { Field, Formik } from 'formik'
 import * as Yup from 'yup'
+import { ScrollView } from 'react-native-gesture-handler'
+import { useMutation } from '@apollo/client'
+import 'react-native-get-random-values'
+import { v4 as uuidv4 } from 'uuid'
 
-import { Box, Button, Input, Select } from 'ui'
+import { Box, Button, Input, Select, SelectImage } from 'ui'
 import { Item } from 'types/datamodels'
+import { useContext, useFirebase } from 'hooks'
 import { ItemCategory } from 'types/enums'
 import { SelectItem } from 'types/global'
 import { ITEM_CATEGORY } from 'constants/enums'
-import { ScrollView } from 'react-native-gesture-handler'
+
+import { CREATE_ITEM } from 'apollo/mutations'
+import { GET_ITEMS } from 'apollo/queries'
 
 type Props = {
   isVisible: boolean
@@ -35,9 +42,14 @@ const validationSchema = Yup.object().shape({
   description: Yup.string(),
 })
 
-// TODO: picture
+type MutationType = { item: Item }
 
 const ItemModal = ({ isVisible, data, onClose }: Props) => {
+  const { show } = useContext('snackbar')
+
+  const [createItem] = useMutation<MutationType>(CREATE_ITEM)
+  const { upload } = useFirebase('items')
+
   const initialValues: FormValues = useMemo(
     () => ({
       picture: data?.picture || '',
@@ -60,9 +72,47 @@ const ItemModal = ({ isVisible, data, onClose }: Props) => {
     []
   )
 
-  const onSubmit = useCallback((values: FormValues) => {
-    console.log(values)
-  }, [])
+  const handleUpdate = useCallback(
+    (values, url?: string) => {
+      createItem({
+        variables: {
+          body: {
+            id: data?.id || '',
+            name: values?.name,
+            price: +values?.price,
+            time: +values?.time,
+            weight: +values?.weight,
+            picture: url || '',
+            description: values?.description,
+            categories: [values?.categories],
+          },
+        },
+        refetchQueries: [{ query: GET_ITEMS }],
+      })
+        .then(() => {
+          show({
+            text: 'Item information saved.',
+            variant: 'success',
+          })
+          onClose()
+        })
+        .catch(() =>
+          show({
+            text: 'Failed to update item information!',
+            variant: 'error',
+          })
+        )
+    },
+    [createItem, onClose, data]
+  )
+
+  const onSubmit = ({ picture, ...values }: FormValues) => {
+    if (!!picture && picture !== data?.picture)
+      upload(picture, data?.id || uuidv4(), (url: string) =>
+        handleUpdate(values, url)
+      )
+    else handleUpdate(values, data?.picture)
+  }
 
   return (
     <GestureRecognizer onSwipeDown={onClose}>
@@ -94,9 +144,18 @@ const ItemModal = ({ isVisible, data, onClose }: Props) => {
             {...{ initialValues, onSubmit, validationSchema }}
             validateOnChange
           >
-            {({ handleSubmit }) => (
+            {({ handleSubmit, setFieldValue }) => (
               <>
                 <ScrollView>
+                  <Field
+                    type="text"
+                    name="picture"
+                    label="Picture"
+                    aspect={[4, 3]}
+                    onChange={setFieldValue}
+                    component={SelectImage}
+                  />
+
                   <Field
                     variant="secondary"
                     type="text"
@@ -154,7 +213,7 @@ const ItemModal = ({ isVisible, data, onClose }: Props) => {
 
                 <Button
                   style={{ marginTop: 16 }}
-                  title="Add item"
+                  title="Save item"
                   onPress={handleSubmit}
                 />
               </>

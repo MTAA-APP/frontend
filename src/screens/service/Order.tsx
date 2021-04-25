@@ -2,25 +2,24 @@ import React, { useCallback } from 'react'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useQuery } from '@apollo/client'
 import AppLoading from 'expo-app-loading'
-
-import { RootStackParamList } from 'types/stack'
-import { Box, Button, Text } from 'ui'
-import { Order as OrderType } from 'types/datamodels'
-import { makeCall } from 'utils/functions'
-
-import { GET_ORDER } from 'apollo/queries'
-import { getFullName } from 'utils/functions'
 import { FlatList, Image, TouchableOpacity } from 'react-native'
 
-import PHONE_ICON from 'assets/icons/phone.png'
-import { formatDate } from 'utils/date'
+import { RootStackParamList } from 'types/stack'
+import { Box, Text } from 'ui'
 import { OrderDetail, TextBlock } from 'components'
+import { formatDate } from 'utils/date'
+import { getFullName } from 'utils/functions'
+import { Order as OrderType } from 'types/datamodels'
+import { makeCall } from 'utils/functions'
+import { PAYMENT, STATUS } from 'constants/enums'
+
+import { GET_ORDER } from 'apollo/queries'
+
+import PHONE_ICON from 'assets/icons/phone.png'
 
 type Props = StackScreenProps<RootStackParamList, 'Order'>
 
 type QueryType = { order: OrderType }
-
-// TODO: status, button, payment
 
 const Order = ({ navigation, route: { params } }: Props) => {
   const { data, loading } = useQuery<QueryType>(GET_ORDER, {
@@ -46,9 +45,6 @@ const Order = ({ navigation, route: { params } }: Props) => {
             Order for {getFullName(data?.order?.customer)}
           </Text>
           <Text>Email: {data?.order?.customer?.email}</Text>
-          <Text variant="label">
-            Created at {formatDate(data?.order?.createdAt)}
-          </Text>
         </Box>
 
         {data?.order?.customer?.phone && (
@@ -76,6 +72,21 @@ const Order = ({ navigation, route: { params } }: Props) => {
         keyExtractor={(_, idx) => `${idx}`}
         renderItem={() => (
           <>
+            <TextBlock
+              title="Order information"
+              data={[
+                {
+                  title: 'Status',
+                  text: STATUS[data?.order?.status],
+                },
+                { title: 'Payment', text: PAYMENT[data?.order?.payment] },
+                {
+                  title: 'Created at',
+                  text: formatDate(data?.order?.createdAt),
+                },
+              ]}
+            />
+
             {!!data?.order?.customer?.address && (
               <TextBlock
                 title="Delivery address"
@@ -118,10 +129,6 @@ const Order = ({ navigation, route: { params } }: Props) => {
           </>
         )}
       />
-
-      <Box padding="xl" paddingTop="xs">
-        <Button title="TODO status" />
-      </Box>
     </>
   )
 }
