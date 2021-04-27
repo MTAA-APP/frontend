@@ -87,7 +87,7 @@ const Orders = ({ navigation }: Props) => {
               }
               handleRightPress={
                 item?.status === Status.READY
-                  ? () => alert('Not supported yet!') // TODO: add status
+                  ? () => alert('Not supported yet!')
                   : undefined
               }
             >

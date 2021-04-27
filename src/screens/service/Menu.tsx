@@ -61,7 +61,7 @@ const Menu = ({ navigation }: Props) => {
             handlePress={() => show(item)}
             leftIcon={EDIT_ICON}
             handleLeftPress={() => show(item)}
-            handleRightPress={() => console.log('TODO')}
+            handleRightPress={() => alert('Not supported yet!')}
           >
             <Box
               style={{ marginLeft: -24, marginBottom: -24 }}
