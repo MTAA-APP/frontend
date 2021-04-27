@@ -26,10 +26,10 @@ const Home = ({ navigation }: Props) => {
       <Box flex={1} padding="xl" justifyContent="space-between">
         <Box marginBottom="xl">
           <Text variant="title" marginBottom="m">
-            Lorem Ipsum & Dolor sit amet
+            Pasto
           </Text>
 
-          <Text>Lorem ipsum dolor sit amet</Text>
+          <Text variant="subtitle">Order your favorite food...</Text>
         </Box>
 
         <Button title="Enter" onPress={() => navigation.push('SignIn')} />
